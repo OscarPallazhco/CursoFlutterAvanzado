@@ -8,5 +8,20 @@
 </head>
 <body>
     <h1>Acceso Denegado</h1>
+
+    <script src="socket.io/socket.io.js"></script>
+
+    <script>
+        var socket = io();
+        var socketId;
+        socket.on('connect', function(){
+            socketId = socket.id;
+            console.log("Cliente", socketId, "conectado al servidor");
+        });
+        socket.on('disconnect', function(){
+            console.log("Cliente", socketId, "desconectado del servidor");
+        });
+    </script>
+
 </body>
 </html>
