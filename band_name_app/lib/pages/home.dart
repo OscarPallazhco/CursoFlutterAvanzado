@@ -45,18 +45,33 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ListTile _bandTile(Band band) {
-    return ListTile(
-      leading: CircleAvatar(
-        child: Text(band.name.substring(0, 2)),
-        backgroundColor: Colors.blue[100],
+  Widget _bandTile(Band band) {
+    return Dismissible(
+      key: Key(band.id),
+      direction: DismissDirection.startToEnd,
+      background: Container(
+        padding: EdgeInsets.all(8.0),
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text("Delete Band", style: TextStyle(color: Colors.white),),
+        ),
       ),
-      title: Text(band.name),
-      trailing: Text(
-        band.votes.toString(),
-        style: TextStyle(fontSize: 20),
+      onDismissed: ( dismissDirection ){
+        //TODO: borrado en el server
+      },
+      child: ListTile(
+        leading: CircleAvatar(
+          child: Text(band.name.substring(0, 2)),
+          backgroundColor: Colors.blue[100],
+        ),
+        title: Text(band.name),
+        trailing: Text(
+          band.votes.toString(),
+          style: TextStyle(fontSize: 20),
+        ),
+        onTap: () {},
       ),
-      onTap: () {},
     );
   }
 
@@ -85,9 +100,9 @@ class _HomePageState extends State<HomePage> {
           );
         },
       );
-    } else if(Platform.isIOS){
+    } else if (Platform.isIOS) {
       showCupertinoDialog(
-        context: context, 
+        context: context,
         builder: (context) {
           return CupertinoAlertDialog(
             title: Text("Add New Band"),
@@ -118,7 +133,10 @@ class _HomePageState extends State<HomePage> {
 
   _addBandToList(String bandInput) {
     if (bandInput.length > 1) {
-      this.bands.add(new Band(id: (this.bands.length + 1).toString(), name: bandInput, votes: 0));
+      this.bands.add(new Band(
+          id: (this.bands.length + 1).toString(), name: bandInput, votes: 0)
+      );
+      setState(() {});
     }
     Navigator.pop(context);
   }
