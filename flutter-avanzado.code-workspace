@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "01_band_names_app",
+			"path": "01_band_names_app"
+		},
+		{
+			"path": "01_band_names_app_server"
+		}
+	]
+}
