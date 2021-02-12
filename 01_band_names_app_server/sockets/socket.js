@@ -1,9 +1,19 @@
 
-const {io} = require("../index.js")
+const {io} = require("../index.js");
+const Band = require("../models/Band.js");
+const Bands = require("../models/bands");
+
+const bands = new Bands();
+
+bands.addBand(new Band("Queen"));
+bands.addBand(new Band("Heroes del silencio"));
+bands.addBand(new Band("Bon Jovi"));
 
 io.on('connection', client => {
     let clientId = client.id;
     console.log("Cliente",clientId," conectado");
+
+    client.emit('active-bands', bands.getBands());
 
     client.on('mensaje', (payload)=>{   //Escuchar mensaje
         console.log("Servidor recibio mensaje:", payload);

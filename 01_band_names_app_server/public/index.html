@@ -26,6 +26,12 @@
            console.log("Cliente: ", socketId, "recibio mensaje:", payload);
         });
 
+        socket.on('active-bands', function(payload) {
+            console.clear();
+            console.log("Bandas activas: ");
+            console.table(payload);
+        });
+
         socket.on('nuevo-mensaje', function(payload) {
            console.log("Cliente: ", socketId, "recibio mensaje:", payload);
         });

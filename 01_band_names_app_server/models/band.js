@@ -1,6 +1,6 @@
 const { request } = require("express");
 
-const {v4: uuidV4} = request("uuid");
+const {v4: uuidV4} = require("uuid");
 
 class Band{
 
