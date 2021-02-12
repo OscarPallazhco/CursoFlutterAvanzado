@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:band_name_app/models/band.dart';
+import 'package:band_name_app/services/socket.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -22,6 +24,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -30,6 +34,20 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.black87),
         )),
         backgroundColor: Colors.white,
+        actions: [
+          Container(
+            child: socketService.getServerStatus == ServerStatus.Online
+                ? Icon(
+                    Icons.check_circle,
+                    color: Colors.blue,
+                  )
+                : Icon(
+                    Icons.offline_bolt,
+                    color: Colors.red,
+                  ),
+            margin: EdgeInsets.only(right: 15),
+          )
+        ],
       ),
       body: ListView.builder(
         itemCount: bands.length,
@@ -54,10 +72,13 @@ class _HomePageState extends State<HomePage> {
         color: Colors.red,
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Text("Delete Band", style: TextStyle(color: Colors.white),),
+          child: Text(
+            "Delete Band",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
-      onDismissed: ( dismissDirection ){
+      onDismissed: (dismissDirection) {
         //TODO: borrado en el server
       },
       child: ListTile(
@@ -134,8 +155,7 @@ class _HomePageState extends State<HomePage> {
   _addBandToList(String bandInput) {
     if (bandInput.length > 1) {
       this.bands.add(new Band(
-          id: (this.bands.length + 1).toString(), name: bandInput, votes: 0)
-      );
+          id: (this.bands.length + 1).toString(), name: bandInput, votes: 0));
       setState(() {});
     }
     Navigator.pop(context);
