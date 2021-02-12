@@ -12,6 +12,11 @@ io.on('connection', client => {
 
     });
 
+    client.on('emitir-mensaje', (payload)=>{   //Escuchar mensaje
+        console.log("Servidor recibio mensaje:", payload);
+        client.broadcast.emit("nuevo-mensaje", payload);    //enviar mensaje a todos los clientes, menos al que lo envia(servidor)
+    });
+
     client.on('disconnect', () => {
         console.log("Cliente",clientId," desconectado");
     });
