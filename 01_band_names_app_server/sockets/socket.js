@@ -15,6 +15,11 @@ io.on('connection', client => {
 
     client.emit('active-bands', bands.getBands());
 
+    client.on('vote-band',(payload)=>{
+        bands.voteBand(payload['id']);
+        io.emit('active-bands', bands.getBands());
+    });
+
     client.on('mensaje', (payload)=>{   //Escuchar mensaje
         console.log("Servidor recibio mensaje:", payload);
 
