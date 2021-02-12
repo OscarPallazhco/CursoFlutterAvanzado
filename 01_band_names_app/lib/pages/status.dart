@@ -13,6 +13,16 @@ class StatusPage extends StatelessWidget {
       body: Center(
         child: Text('Estado: ${ socketService.getServerStatus }'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          print("mensaje enviado desde flutter:");
+          print({'device':"app", 'mensaje':'mensaje desde flutter'});
+          socketService.getSocket.emit("emitir-mensaje",{'device':"app", 'mensaje':'mensaje desde flutter'});
+        },
+        child: Icon(Icons.send),
+      ),
     );
   }
+
+
 }
