@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import 'package:band_name_app/models/band.dart';
 import 'package:band_name_app/services/socket.dart';
@@ -56,11 +57,18 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: ListView.builder(
-        itemCount: bands.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _bandTile(bands[index]);
-        },
+      body: Column(
+        children: [
+          _graphics(),
+          Expanded(
+            child: ListView.builder(
+              itemCount: bands.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _bandTile(bands[index]);
+              },
+            ),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -71,7 +79,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _bandTile(Band band) {
-
     final socketService = Provider.of<SocketService>(context, listen: false);
 
     return Dismissible(
@@ -89,7 +96,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onDismissed: (dismissDirection) {
-        socketService.getSocket.emit('delete-band',{'id':band.id});
+        socketService.getSocket.emit('delete-band', {'id': band.id});
       },
       child: ListTile(
         leading: CircleAvatar(
@@ -102,7 +109,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontSize: 20),
         ),
         onTap: () {
-          socketService.getSocket.emit('vote-band',{'id':band.id});
+          socketService.getSocket.emit('vote-band', {'id': band.id});
         },
       ),
     );
@@ -167,8 +174,31 @@ class _HomePageState extends State<HomePage> {
   _addBandToList(String bandInput) {
     final socketService = Provider.of<SocketService>(context, listen: false);
     if (bandInput.length > 1) {
-      socketService.getSocket.emit('add-band',{'name':bandInput});
+      socketService.getSocket.emit('add-band', {'name': bandInput});
     }
     Navigator.pop(context);
+  }
+
+  _graphics() {
+    double height = MediaQuery.of(context).size.height;
+    Map<String, double> dataMap = new Map();
+    this.bands.forEach((element) {
+      dataMap.putIfAbsent(element.name, () => element.votes.toDouble());
+    });
+
+    return Container(
+      width: double.infinity,
+      height: 0.30 * height,
+      child: PieChart(
+        dataMap: dataMap,
+        animationDuration: Duration(milliseconds: 800),
+        chartValuesOptions: ChartValuesOptions(
+          showChartValueBackground: false,
+          showChartValues: true,
+          showChartValuesInPercentage: true,
+          showChartValuesOutside: false,
+        ),
+      ),
+    );
   }
 }
