@@ -186,19 +186,29 @@ class _HomePageState extends State<HomePage> {
       dataMap.putIfAbsent(element.name, () => element.votes.toDouble());
     });
 
-    return Container(
-      width: double.infinity,
-      height: 0.30 * height,
-      child: PieChart(
-        dataMap: dataMap,
-        animationDuration: Duration(milliseconds: 800),
-        chartValuesOptions: ChartValuesOptions(
-          showChartValueBackground: false,
-          showChartValues: true,
-          showChartValuesInPercentage: true,
-          showChartValuesOutside: false,
+    if (dataMap.length > 0) {
+      return Container(
+        width: double.infinity,
+        height: 0.30 * height,
+        child: PieChart(
+          dataMap: dataMap,
+          animationDuration: Duration(milliseconds: 800),
+          chartValuesOptions: ChartValuesOptions(
+            showChartValueBackground: false,
+            showChartValues: true,
+            showChartValuesInPercentage: true,
+            showChartValuesOutside: false,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        height: 0.30 * height,
+        child: Center(
+          child: Text("No Bands"),
+        ),
+      );
+    }
   }
 }
