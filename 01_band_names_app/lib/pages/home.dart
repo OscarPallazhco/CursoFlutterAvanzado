@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onDismissed: (dismissDirection) {
-        //TODO: borrado en el server
+        socketService.getSocket.emit('delete-band',{'id':band.id});
       },
       child: ListTile(
         leading: CircleAvatar(
