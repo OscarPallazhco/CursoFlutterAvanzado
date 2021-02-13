@@ -25,6 +25,11 @@ io.on('connection', client => {
         io.emit('active-bands', bands.getBands());
     });
 
+    client.on('delete-band',(payload)=>{
+        bands.deleteBand(payload['id']);
+        io.emit('active-bands', bands.getBands());
+    });
+
     client.on('mensaje', (payload)=>{   //Escuchar mensaje
         console.log("Servidor recibio mensaje:", payload);
 
