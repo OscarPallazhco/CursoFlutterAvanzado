@@ -20,6 +20,11 @@ io.on('connection', client => {
         io.emit('active-bands', bands.getBands());
     });
 
+    client.on('add-band',(payload)=>{
+        bands.addBand(new Band(payload['name']));
+        io.emit('active-bands', bands.getBands());
+    });
+
     client.on('mensaje', (payload)=>{   //Escuchar mensaje
         console.log("Servidor recibio mensaje:", payload);
 
