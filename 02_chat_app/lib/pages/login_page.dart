@@ -1,3 +1,4 @@
+import 'package:chat_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/widgets/custom_labels.dart';
@@ -57,12 +58,15 @@ class _FormState extends State<Form> {
             textController: passwordInputController,
             isPassword: true,
           ),
-          RaisedButton(onPressed: () {
-            print(emailInputController.text);
-            print(passwordInputController.text);
-          }),
+          LoginButton(text: 'Ingresar', onPressedButton: _ingresar,)
         ],
       ),
     );
   }
+
+  _ingresar(){
+    print(emailInputController.text);
+    print(passwordInputController.text);
+  }
+
 }
