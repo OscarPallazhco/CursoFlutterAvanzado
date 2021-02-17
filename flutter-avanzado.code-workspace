@@ -6,6 +6,9 @@
 		},
 		{
 			"path": "01_band_names_app_server"
+		},
+		{
+			"path": "02_chat_app"
 		}
 	]
 }
