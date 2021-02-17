@@ -12,17 +12,27 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xffF2F2F2),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Logo(),
-            Form(),
-            SizedBox(
-              height: 40,
+        child: SingleChildScrollView(
+          //permite hacer scroll cuando se despliega el teclado en pantalla
+          physics: BouncingScrollPhysics(), //efecto de rebote en el scroll
+          child: Container(
+            height: MediaQuery.of(context).size.height*.90,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Logo(),
+                Form(),
+                SizedBox(
+                  height: 40,
+                ),
+                Labels(),
+                SizedBox(
+                  height: 40,
+                ),
+                TermsAndConditions(),
+              ],
             ),
-            Labels(),
-            TermsAndConditions(),
-          ],
+          ),
         ),
       ),
     );
@@ -58,15 +68,17 @@ class _FormState extends State<Form> {
             textController: passwordInputController,
             isPassword: true,
           ),
-          LoginButton(text: 'Ingresar', onPressedButton: _ingresar,)
+          LoginButton(
+            text: 'Ingresar',
+            onPressedButton: _ingresar,
+          )
         ],
       ),
     );
   }
 
-  _ingresar(){
+  _ingresar() {
     print(emailInputController.text);
     print(passwordInputController.text);
   }
-
 }
