@@ -16,18 +16,16 @@ class LoginPage extends StatelessWidget {
           //permite hacer scroll cuando se despliega el teclado en pantalla
           physics: BouncingScrollPhysics(), //efecto de rebote en el scroll
           child: Container(
-            height: MediaQuery.of(context).size.height*.90,
+            height: MediaQuery.of(context).size.height * .90,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Logo(),
+                Logo(titulo: 'Login',),
                 Form(),
-                SizedBox(
-                  height: 40,
-                ),
-                Labels(),
-                SizedBox(
-                  height: 40,
+                Labels(
+                  label1: '¿No tienes cuenta?',
+                  label2: '!Crea una ahora!',
+                  routeName: "register",
                 ),
                 TermsAndConditions(),
               ],
