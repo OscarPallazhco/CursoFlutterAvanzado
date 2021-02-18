@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:chat_app/widgets/chat_message.dart';
+
 class ChatPage extends StatefulWidget {
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -12,6 +14,12 @@ class _ChatPageState extends State<ChatPage> {
   TextEditingController _chatBoxCtrler = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
   bool _isWriting = false;
+  List<ChatMessage> _messages = [
+    ChatMessage(message: 'Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!', uid: '1234'),
+    ChatMessage(message: 'También Hola mundo', uid: '45'),
+    ChatMessage(message: 'New Message', uid: '1234'),
+    ChatMessage(message: 'ByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeBye', uid: '12345'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +60,9 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
               child: ListView.builder(
                 physics: BouncingScrollPhysics(),
+                itemCount: this._messages.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Text('$index');
+                  return this._messages[index];
                 },
                 reverse: true,
               ),
@@ -97,7 +106,7 @@ class _ChatPageState extends State<ChatPage> {
           )),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 4),
-            child: !Platform.isAndroid
+            child: Platform.isAndroid
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 4),
                     child: IconTheme(
@@ -126,10 +135,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleSubmit(String texto) {
-    print(texto);
+    this._messages.insert(0, ChatMessage(message: texto, uid: '1234'));
     _chatBoxCtrler.clear();
     _focusNode.requestFocus();
-    setState(() {
+    setState(() {      
       _isWriting = false;
     });
   }
