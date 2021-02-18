@@ -2,20 +2,28 @@ import 'package:flutter/material.dart';
 
 class ChatMessage extends StatelessWidget {
   final String message, uid, myUid;
+  final AnimationController animationCtler;
 
   const ChatMessage(
       {Key key,
       @required this.message,
       @required this.uid,
+      @required this.animationCtler,
       this.myUid = '1234'})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: this.uid == this.myUid
-          ? _displayMineMessage()
-          : _displayOtherMessage(),
+    return FadeTransition(
+      opacity: animationCtler,
+      child: SizeTransition(
+        sizeFactor: CurvedAnimation(curve: Curves.easeOut, parent: animationCtler),
+        child: Container(
+          child: this.uid == this.myUid
+              ? _displayMineMessage()
+              : _displayOtherMessage(),
+        ),
+      ),
     );
   }
 
@@ -25,7 +33,10 @@ class ChatMessage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(9),
         margin: EdgeInsets.only(top: 4, bottom: 4, left: 4, right: 80),
-        child: Text(this.message, style: TextStyle(color: Colors.black87),),
+        child: Text(
+          this.message,
+          style: TextStyle(color: Colors.black87),
+        ),
         decoration: BoxDecoration(
           color: Color(0xffE4E5E8),
           borderRadius: BorderRadius.circular(20),
@@ -40,7 +51,10 @@ class ChatMessage extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(9),
         margin: EdgeInsets.only(top: 4, bottom: 4, left: 80, right: 4),
-        child: Text(this.message, style: TextStyle(color: Colors.white),),
+        child: Text(
+          this.message,
+          style: TextStyle(color: Colors.white),
+        ),
         decoration: BoxDecoration(
           color: Color(0xff4D9EF6),
           borderRadius: BorderRadius.circular(20),

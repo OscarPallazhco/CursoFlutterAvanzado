@@ -10,16 +10,11 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   TextEditingController _chatBoxCtrler = new TextEditingController();
   FocusNode _focusNode = new FocusNode();
   bool _isWriting = false;
-  List<ChatMessage> _messages = [
-    ChatMessage(message: 'Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!Hola mundo!', uid: '1234'),
-    ChatMessage(message: 'También Hola mundo', uid: '45'),
-    ChatMessage(message: 'New Message', uid: '1234'),
-    ChatMessage(message: 'ByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeByeBye', uid: '12345'),
-  ];
+  List<ChatMessage> _messages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
             child: TextField(
               controller: _chatBoxCtrler,
               onSubmitted:
-                  _handleSubmit, //TODO sigue enviando a pesar de estar vacia la caja de texto
+                  _handleSubmit,
               onChanged: (String texto) {
                 setState(() {
                   this._isWriting = this._chatBoxCtrler.text.trim().length > 0;
@@ -135,10 +130,18 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleSubmit(String texto) {
-    this._messages.insert(0, ChatMessage(message: texto, uid: '1234'));
+    if (texto.length == 0) return;  //no enviar mensajes vacios con la tecla enter
     _chatBoxCtrler.clear();
     _focusNode.requestFocus();
-    setState(() {      
+    ChatMessage newMessage = ChatMessage(
+      message: texto,
+      uid: '1234',
+      animationCtler: AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 400)),
+    );
+    this._messages.insert(0, newMessage);
+    newMessage.animationCtler.forward();
+    setState(() {
       _isWriting = false;
     });
   }
