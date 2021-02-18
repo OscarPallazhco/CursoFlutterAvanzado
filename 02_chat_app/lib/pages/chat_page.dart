@@ -17,6 +17,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   List<ChatMessage> _messages = [];
 
   @override
+  void dispose() {
+    for (ChatMessage message in this._messages) {
+      message.animationCtler.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -146,3 +154,4 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     });
   }
 }
+ 
