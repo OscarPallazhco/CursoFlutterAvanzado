@@ -1,10 +1,13 @@
-import 'package:chat_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_labels.dart';
 import 'package:chat_app/widgets/custom_logo.dart';
 import 'package:chat_app/widgets/custom_terms.dart';
 import 'package:chat_app/widgets/custom_input.dart';
+
+import 'package:chat_app/services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -78,5 +81,8 @@ class _FormState extends State<Form> {
   _ingresar() {
     print(emailInputController.text);
     print(passwordInputController.text);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    //listen: false para que por defecto no redibuje el widget
+    authService.login(emailInputController.text, passwordInputController.text);
   }
 }
