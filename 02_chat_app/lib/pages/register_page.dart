@@ -1,10 +1,15 @@
-import 'package:chat_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_labels.dart';
 import 'package:chat_app/widgets/custom_logo.dart';
 import 'package:chat_app/widgets/custom_terms.dart';
 import 'package:chat_app/widgets/custom_input.dart';
+
+import 'package:chat_app/helpers/show_alert.dart';
+
+import 'package:chat_app/services/auth_service.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -49,6 +54,9 @@ class _FormState extends State<Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -74,16 +82,29 @@ class _FormState extends State<Form> {
             isPassword: true,
           ),
           LoginButton(
-            text: 'Ingresar',
-            onPressedButton: _ingresar,
+            text: 'Registrar',
+            onPressedButton: authService.authenticating ? null : () async{
+              FocusScope.of(context).unfocus();   //quitar el teclado al aplastar el botón registrar
+              if (userInputController.text.trim().length < 1) {
+                return showAlert(context, 'Campos incompletos', 'User es necesario');
+              }
+              if (emailInputController.text.trim().length < 1) {
+                return showAlert(context, 'Campos incompletos', 'Email es necesario');
+              }
+              if (passwordInputController.text.trim().length < 1) {
+                return showAlert(context, 'Campos incompletos', 'Password es necesario');
+              }
+              //TODO: comprobar que sea un mail valido
+              final registerOk = await authService.register(userInputController.text.trim(), emailInputController.text.trim(), passwordInputController.text.trim());
+              if (registerOk == true) {
+                Navigator.pushReplacementNamed(context, 'users');
+              }else{
+                showAlert(context, 'Registro incorrecto', registerOk);  //en este caso registerOk no es boolean sino String
+              }
+            },
           )
         ],
       ),
     );
-  }
-
-  _ingresar() {
-    print(emailInputController.text);
-    print(passwordInputController.text);
   }
 }
