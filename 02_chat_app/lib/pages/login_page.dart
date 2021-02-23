@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:chat_app/helpers/show_alert.dart';
+
 import 'package:chat_app/widgets/custom_button.dart';
 import 'package:chat_app/widgets/custom_labels.dart';
 import 'package:chat_app/widgets/custom_logo.dart';
@@ -75,9 +77,14 @@ class _FormState extends State<Form> {
           ),
           LoginButton(
             text: 'Ingresar',
-            onPressedButton: authService.authenticating ? null : (){
+            onPressedButton: authService.authenticating ? null : ()async{
               FocusScope.of(context).unfocus();   //quitar el teclado al aplastar el botón ingresar
-              authService.login(emailInputController.text.trim(), passwordInputController.text.trim());
+              final loginOk = await authService.login(emailInputController.text.trim(), passwordInputController.text.trim());
+              if (loginOk) {
+                // Navigator.pushReplacementNamed(context, 'users');
+              }else{
+                showAlert(context, 'Login incorrecto', 'Credenciales incorrectas');
+              }
             },
           )
         ],
