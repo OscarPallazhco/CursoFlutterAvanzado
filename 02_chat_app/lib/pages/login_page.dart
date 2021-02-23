@@ -88,7 +88,7 @@ class _FormState extends State<Form> {
               //TODO: comprobar que sea un mail valido
               final loginOk = await authService.login(emailInputController.text.trim(), passwordInputController.text.trim());
               if (loginOk) {
-                // Navigator.pushReplacementNamed(context, 'users');
+                Navigator.pushReplacementNamed(context, 'users');
               }else{
                 showAlert(context, 'Login incorrecto', 'Credenciales incorrectas');
               }
