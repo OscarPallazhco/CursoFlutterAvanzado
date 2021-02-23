@@ -23,7 +23,9 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Logo(titulo: 'Login',),
+                Logo(
+                  titulo: 'Login',
+                ),
                 Form(),
                 Labels(
                   label1: '¿No tienes cuenta?',
@@ -51,6 +53,8 @@ class _FormState extends State<Form> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -71,18 +75,13 @@ class _FormState extends State<Form> {
           ),
           LoginButton(
             text: 'Ingresar',
-            onPressedButton: _ingresar,
+            onPressedButton: authService.authenticating ? null : (){
+              FocusScope.of(context).unfocus();   //quitar el teclado al aplastar el botón ingresar
+              authService.login(emailInputController.text.trim(), passwordInputController.text.trim());
+            },
           )
         ],
       ),
     );
-  }
-
-  _ingresar() {
-    print(emailInputController.text);
-    print(passwordInputController.text);
-    final authService = Provider.of<AuthService>(context, listen: false);
-    //listen: false para que por defecto no redibuje el widget
-    authService.login(emailInputController.text, passwordInputController.text);
   }
 }

@@ -7,30 +7,47 @@ import 'package:chat_app/global/environments.dart';
 import 'package:chat_app/models/usuario.dart';
 
 class AuthService with ChangeNotifier {
-
   Usuario usuario;
+  bool _authenticating = false;
+
+  bool get authenticating => this._authenticating;
+
+  set authenticating(bool value) {
+    this._authenticating = value;
+    notifyListeners();
+  }
 
   Future login(String email, String password) async {
+    this.authenticating = true;
+
     final data = {
       'email': email,
       'password': password,
     };
 
-    final resp = await http.post(
-      '${Environments.apiUrl}/auth/login',
-      body: jsonEncode(data),
-      headers: {'Content-type': 'application/json'}
-    );
+    try {
+      final resp = await http.post('${Environments.apiUrl}/auth/login',
+          body: jsonEncode(data),
+          headers: {'Content-type': 'application/json'});
 
-    print('resp.body');
-    print(resp.body);
+      print('resp.body');
+      print(resp.body);
 
-    if (resp.statusCode==200) {
-      final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario = loginResponse.usuario;
+      if (resp.statusCode == 200) {
+        final loginResponse = loginResponseFromJson(resp.body);
+        this.usuario = loginResponse.usuario;
+        print('usuario');
+        print(this.usuario.toJson());
+      }else{
+        print('Credenciales incorrectas');
+      }
+
+
+
+    } catch (e) {
+      print(e);
     }
 
-    print('usuario');
-    print(this.usuario.toJson());
+    this.authenticating = false;
   }
 }
