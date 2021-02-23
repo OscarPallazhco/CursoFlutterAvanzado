@@ -79,6 +79,13 @@ class _FormState extends State<Form> {
             text: 'Ingresar',
             onPressedButton: authService.authenticating ? null : ()async{
               FocusScope.of(context).unfocus();   //quitar el teclado al aplastar el botón ingresar
+              if (emailInputController.text.trim().length < 1) {
+                return showAlert(context, 'Campos incompletos', 'Email es necesario');
+              }
+              if (passwordInputController.text.trim().length < 1) {
+                return showAlert(context, 'Campos incompletos', 'Password es necesario');
+              }
+              //TODO: comprobar que sea un mail valido
               final loginOk = await authService.login(emailInputController.text.trim(), passwordInputController.text.trim());
               if (loginOk) {
                 // Navigator.pushReplacementNamed(context, 'users');
