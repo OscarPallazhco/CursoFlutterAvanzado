@@ -12,8 +12,16 @@ class LoadingPage extends StatelessWidget {
         future: checkLoginState(context),
         builder: (context, snapshot) {
           return Center(
-            child: Text('Ingresando ...'),
-          );
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Text("Ingresando"),
+                  padding: EdgeInsets.only(bottom: 20),
+                ),
+                CircularProgressIndicator(),
+              ],
+          ));
         },
       ),
     );
@@ -31,9 +39,8 @@ class LoadingPage extends StatelessWidget {
       //     transitionDuration: Duration(milliseconds: 0),
       //   )
       // );
-    }else{
+    } else {
       Navigator.pushReplacementNamed(context, 'login');
     }
   }
-
 }
