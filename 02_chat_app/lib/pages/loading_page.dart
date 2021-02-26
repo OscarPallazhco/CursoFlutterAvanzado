@@ -17,7 +17,7 @@ class LoadingPage extends StatelessWidget {
               children: [
                 Container(
                   child: Text("Ingresando"),
-                  padding: EdgeInsets.only(bottom: 20),
+                  padding: EdgeInsets.only(bottom: 30),
                 ),
                 CircularProgressIndicator(),
               ],
