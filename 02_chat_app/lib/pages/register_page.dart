@@ -10,6 +10,7 @@ import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/helpers/show_alert.dart';
 
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_service.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -56,6 +57,7 @@ class _FormState extends State<Form> {
   Widget build(BuildContext context) {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -97,6 +99,7 @@ class _FormState extends State<Form> {
               //TODO: comprobar que sea un mail valido
               final registerOk = await authService.register(userInputController.text.trim(), emailInputController.text.trim(), passwordInputController.text.trim());
               if (registerOk == true) {
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'users');
               }else{
                 showAlert(context, 'Registro incorrecto', registerOk);  //en este caso registerOk no es boolean sino String

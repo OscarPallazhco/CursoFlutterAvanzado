@@ -10,6 +10,7 @@ import 'package:chat_app/widgets/custom_terms.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_service.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -56,6 +57,7 @@ class _FormState extends State<Form> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -88,6 +90,7 @@ class _FormState extends State<Form> {
               //TODO: comprobar que sea un mail valido
               final loginOk = await authService.login(emailInputController.text.trim(), passwordInputController.text.trim());
               if (loginOk) {
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'users');
               }else{
                 showAlert(context, 'Login incorrecto', 'Credenciales incorrectas');
