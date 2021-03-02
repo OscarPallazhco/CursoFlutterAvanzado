@@ -15,8 +15,8 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   //final String userName = "dfdf";
   //final bool isConnected = false;
-  final String userName;
-  final bool isConnected;
+  // final String userName;
+  // final bool isConnected;
   final usuarios = [
     Usuario(uid: '1', name: "Jose", email: "Jose@gmail.com", isOnline: true),
     Usuario(uid: '2', name: "Marbella",email: "Marbella@gmail.com",isOnline: false),
@@ -33,7 +33,7 @@ class _UsersPageState extends State<UsersPage> {
   ];
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  _UsersPageState({this.userName = "Eduardo", this.isConnected = false});
+  // _UsersPageState({this.userName = "Eduardo", this.isConnected = false});
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +62,15 @@ class _UsersPageState extends State<UsersPage> {
         actions: [
           Container(
             margin: EdgeInsets.only(right: 10),
-            child: Icon(
-              Icons.check_circle,
-              color: this.isConnected ? Colors.green[400] : Colors.red[400],
-            ),
+            child: socketService.getServerStatus == ServerStatus.Online
+              ? Icon(
+                  Icons.check_circle,
+                  color: Colors.blue,
+                )
+              : Icon(
+                  Icons.offline_bolt,
+                  color: Colors.red,
+                ),
           )
         ],
       ),
