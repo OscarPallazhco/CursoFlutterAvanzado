@@ -3,6 +3,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:chat_app/global/environments.dart';
 
+import 'package:chat_app/services/auth_service.dart';
+
 enum ServerStatus {
   Online,
   Offline,
@@ -17,12 +19,20 @@ class SocketService with ChangeNotifier {
   ServerStatus get getServerStatus => this._status;
   IO.Socket get getSocket => this._socket;
 
-  void connect() {
+  void connect() async{
+
+    final token = await AuthService.getToken();
+    print("token");
+    print(token);
+
     // this._socket = IO.io('https://bandnamesserver.herokuapp.com/', {
     this._socket = IO.io(Environments.socketUrl, {
       'transports': ['websocket'],
       'autoconnect': true,
       'forceNew' : true,
+      'extraHeaders': {
+        'x-token': token
+      },
     });
 
     this._socket.onConnect((_) {
