@@ -26,19 +26,22 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   AuthService authService;
 
   @override
-  void dispose() {
-    for (ChatMessage message in this._messages) {
-      message.animationCtler.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
   void initState() {
     this.chatService = Provider.of<ChatService>(context, listen: false);
     this.socketService = Provider.of<SocketService>(context, listen: false);
     this.authService = Provider.of<AuthService>(context, listen: false);
+
+    this.socketService.getSocket.on('mensaje-personal', _listenPersonalMessage);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (ChatMessage message in this._messages) {   //eliminar los reursos de las animaciones
+      message.animationCtler.dispose();
+    }
+    this.socketService.getSocket.off('mensaje-personal'); //eliminar los reursos de estar escuchando el evento
+    super.dispose();
   }
 
   @override
@@ -101,6 +104,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     );
   }
 
+
+  void _listenPersonalMessage(dynamic payload){
+    ChatMessage newMessage = ChatMessage(
+      message: payload['message'],
+      uid: payload['from'],
+      animationCtler: AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 400)),
+    );
+    setState(() {
+      this._messages.insert(0, newMessage);
+    });
+    newMessage.animationCtler.forward();
+  }
+
   Widget _inputChatBox() {
     return SafeArea(
         child: Container(
@@ -161,7 +178,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _focusNode.requestFocus();
     ChatMessage newMessage = ChatMessage(
       message: texto,
-      uid: '1234',
+      uid: this.authService.usuario.uid,
       animationCtler: AnimationController(
           vsync: this, duration: const Duration(milliseconds: 400)),
     );
