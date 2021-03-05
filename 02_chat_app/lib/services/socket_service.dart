@@ -22,8 +22,8 @@ class SocketService with ChangeNotifier {
   void connect() async{
 
     final token = await AuthService.getToken();
-    print("token");
-    print(token);
+    // print("token");
+    // print(token);
 
     // this._socket = IO.io('https://bandnamesserver.herokuapp.com/', {
     this._socket = IO.io(Environments.socketUrl, {
