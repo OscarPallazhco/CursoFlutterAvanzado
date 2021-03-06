@@ -11,8 +11,8 @@ class Page2 extends StatelessWidget {
           title: StreamBuilder<User>(
             stream: userService.userStream ,
             builder: (BuildContext context, AsyncSnapshot<User> snapshot){
-              return snapshot.hasData
-              ? Text(snapshot.data.name)
+              return userService.existUser
+              ? Text(userService.getUser.name)
               : Text('Page 2');
             },
           ),
