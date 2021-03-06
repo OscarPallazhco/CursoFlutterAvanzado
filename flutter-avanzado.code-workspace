@@ -9,6 +9,9 @@
 		},
 		{
 			"path": "02_chat_app"
+		},
+		{
+			"path": "03_estados"
 		}
 	]
 }
