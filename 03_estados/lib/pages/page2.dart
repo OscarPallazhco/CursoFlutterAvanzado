@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:estados/models/user.dart';
+import 'package:estados/services/user_service.dart';
+
 class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,7 +16,7 @@ class Page2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MaterialButton(
-                onPressed: () {},
+                onPressed: _establishUser,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,
@@ -27,7 +30,7 @@ class Page2 extends StatelessWidget {
                 elevation: 2,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: _changeAge,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,
@@ -41,7 +44,7 @@ class Page2 extends StatelessWidget {
                 elevation: 2,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: _addProfession,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,
@@ -73,5 +76,22 @@ class Page2 extends StatelessWidget {
             // ),
           ],
         ));
+  }
+
+  void _establishUser() {
+    final User user = new User(
+      name: 'Eduardo',
+      age: 25,
+      professions: []
+    );
+    userService.setUser(user);
+  }
+
+  void _changeAge() {
+    userService.changeAge(26);
+  }
+
+  void _addProfession() {
+    userService.addProfession('Developer');
   }
 }
