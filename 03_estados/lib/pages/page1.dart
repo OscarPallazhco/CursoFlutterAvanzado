@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:estados/services/user_service.dart';
+
 
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final userService = Provider.of<UserService>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Page 1'),
           centerTitle: true,
         ),
-        body: UserInformation(),
+        body: userService.existUser
+          ? UserInformation()
+          : Center(child: Text('No existe información del usuario'),),
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
