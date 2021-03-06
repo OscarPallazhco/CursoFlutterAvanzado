@@ -11,10 +11,14 @@ class Page1 extends StatelessWidget {
           title: Text('Page 1'),
           centerTitle: true,
         ),
-        body: userService.existUser
-        ? UserInformation(user: userService.getUser )
-        : Center(
-          child: Text('No existe información del usuario'),
+        body: StreamBuilder(
+          //para usar el stream hay que envolverlo en un StreamBuilder
+          stream: userService.userStream ,
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot){
+            return snapshot.hasData
+            ? UserInformation(user: userService.getUser)
+            : Center(child: Text('No existe información del usuario'));
+          },
         ),
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
