@@ -9,7 +9,53 @@ class Page2 extends StatelessWidget {
           centerTitle: true,
         ),
         body: Center(
-          child: Text('Page 2 '),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MaterialButton(
+                onPressed: () {},
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Establecer usuario',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+                color: Colors.blue,
+                shape: StadiumBorder(),
+                elevation: 2,
+              ),
+              MaterialButton(
+                onPressed: () {},
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Cambiar edad',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+                color: Colors.blue,
+                shape: StadiumBorder(),
+                elevation: 2,
+              ),
+              MaterialButton(
+                onPressed: () {},
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Añadir profesión',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ),
+                color: Colors.blue,
+                shape: StadiumBorder(),
+                elevation: 2,
+              ),
+            ],
+          ),
         ),
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
