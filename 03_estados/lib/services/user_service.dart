@@ -10,6 +10,18 @@ class _UserService {
   }
 
   bool get existUser => this._user!=null;
+
+  void changeAge(int age){
+    if (this._user!= null) {
+      this._user.age = age;
+    }
+  }
+
+  void addProfession(String profession){
+    if (this._user!= null) {
+      this._user.professions.add(profession);
+    }
+  }
 }
 
 final userService = new _UserService();

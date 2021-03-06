@@ -1,7 +1,8 @@
+import 'package:meta/meta.dart';
 class User {
   String name;
   int age;
   List<String> professions;
 
-  User({this.name, this.age, this.professions});
+  User({@required this.name, this.age, this.professions});
 }
