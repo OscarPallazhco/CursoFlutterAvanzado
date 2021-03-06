@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:estados/models/user.dart';
+import 'package:estados/services/user_service.dart';
 
 class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final userService = Provider.of<UserService>(context);
+
     return Scaffold(
         appBar: AppBar(
-          title: Text('Page 2'),
+          title: userService.existUser
+          ? Text(userService.getUser.name)
+          : Text('Page 2'),
           centerTitle: true,
         ),
         body: Center(
@@ -13,7 +22,20 @@ class Page2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MaterialButton(
-                onPressed: () {},
+                onPressed: (){
+                  final userService = Provider.of<UserService>(context, listen: false);
+                  //por defecto el listen está en true, cuando se usa dentro de un método hay que
+                  //setearlo en false, porque el provider necesita estar dentro de un build para
+                  //redibujarlo
+
+                  final User user = new User(
+                    name: 'Eduardo',
+                    age: 25,
+                    professions: []
+                  );
+
+                  userService.setUser = user;
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,
@@ -27,7 +49,10 @@ class Page2 extends StatelessWidget {
                 elevation: 2,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: (){
+                  final userService = Provider.of<UserService>(context, listen: false);
+                  userService.changeAge(26);
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,
@@ -41,7 +66,10 @@ class Page2 extends StatelessWidget {
                 elevation: 2,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: (){
+                  final userService = Provider.of<UserService>(context, listen: false);
+                  userService.addProfession('Developer');
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,

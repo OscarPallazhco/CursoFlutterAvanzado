@@ -11,5 +11,23 @@ class UserService with ChangeNotifier{
     this._user = user;
     notifyListeners();
   }
+  void changeAge(int age){
+    if (this._user!= null) {
+      this._user.age = age;
+      notifyListeners();
+    }
+  }
+
+  void addProfession(String profession){
+    if (this._user!= null) {
+      this._user.professions.add(profession);
+      notifyListeners();
+    }
+  }
+
+  void deleteUser(){
+    this._user = null;
+    notifyListeners();
+  }
   
 }
