@@ -11,3 +11,12 @@ class InitialUserState extends UserState {
   //además se usará para pasarle como el estado inicial que requieren los cubits
   final existUser = false;
 }
+
+class ActiveUserState extends UserState {
+  //estado que será pasado al cubit cuando en la ui se seleccione establecer usuario
+  final existUser = true;
+  final User activeUser;
+
+  ActiveUserState(this.activeUser);
+  
+}
