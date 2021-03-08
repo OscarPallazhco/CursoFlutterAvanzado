@@ -11,15 +11,7 @@ class Page1 extends StatelessWidget {
           title: Text('Page 1'),
           centerTitle: true,
         ),
-        body: BlocBuilder<UserCubit, UserState>(
-          builder: (BuildContext context, state) { 
-            if (state is InitialUserState) {
-              return Center(child: Text('No existe información del usuario'),);
-            } else {
-              return UserInformation();
-            }
-          },
-        ),
+        body: BodyScaffold(),
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -36,6 +28,25 @@ class Page1 extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class BodyScaffold extends StatelessWidget {
+  const BodyScaffold({Key key,}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<UserCubit, UserState>(
+      builder: (BuildContext context, state) { 
+        if (state is InitialUserState) {
+          return Center(child: Text('No existe información del usuario'),);
+        } else if(state is ActiveUserState){
+          return UserInformation();
+        } else {
+          return Center(child: Text('Estado no reconocido'),);
+        }
+      },
+    );
   }
 }
 
