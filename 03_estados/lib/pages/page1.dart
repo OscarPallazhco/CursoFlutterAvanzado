@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:estados/models/user.dart';
 import 'package:estados/bloc/user/user_cubit.dart';
 
 class Page1 extends StatelessWidget {
@@ -41,7 +42,7 @@ class BodyScaffold extends StatelessWidget {
         if (state is InitialUserState) {
           return Center(child: Text('No existe información del usuario'),);
         } else if(state is ActiveUserState){
-          return UserInformation();
+          return UserInformation(user: state.activeUser,);
         } else {
           return Center(child: Text('Estado no reconocido'),);
         }
@@ -51,9 +52,10 @@ class BodyScaffold extends StatelessWidget {
 }
 
 class UserInformation extends StatelessWidget {
-  const UserInformation({
-    Key key,
-  }) : super(key: key);
+
+  final User user;
+
+  const UserInformation({Key key, @required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,19 +68,29 @@ class UserInformation extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('General', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-            Divider(),
-            ListTile(title: Text('Nombre: '),),
-            ListTile(title: Text('Edad: '),),
-            
+            Divider(),            
+            ListTile(title: Text('Nombre: ${this.user.name}'),),
+            ListTile(title: Text('Edad: ${this.user.age}'),),
 
             Text('Profesiones', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
             Divider(),
-            ListTile(title: Text('Profesión 1: '),),
-            ListTile(title: Text('Profesión 2: '),),
-            ListTile(title: Text('Profesión 3: '),),
+            _showProfessions(),
           ],
         ),
       ),
     );
+  }
+
+  _showProfessions() {
+    return this.user.professions.length>0
+    ? Expanded(
+      child: ListView.builder(
+        itemCount: this.user.professions.length,
+        itemBuilder: (BuildContext context, int index) {  
+          return ListTile(title: Text('${this.user.professions[index]}'),);
+        },
+      ),
+    )
+    :ListTile(title: Text('Ninguna'),);
   }
 }
