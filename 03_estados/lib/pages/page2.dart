@@ -42,7 +42,7 @@ class Page2 extends StatelessWidget {
                 elevation: 2,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () => userCubit.changeAge(26) ,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,
