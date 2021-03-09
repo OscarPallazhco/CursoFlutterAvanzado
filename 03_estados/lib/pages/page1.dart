@@ -7,10 +7,25 @@ import 'package:estados/bloc/user/user_cubit.dart';
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final userCubit = BlocProvider.of<UserCubit>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Page 1'),
           centerTitle: true,
+          actions: [
+            BlocBuilder<UserCubit, UserState>(
+              builder: (BuildContext context, state) {
+                return IconButton(
+                  icon: Icon(Icons.exit_to_app),
+                  onPressed: state is ActiveUserState
+                  ? userCubit.deleteUser
+                  : null,
+                );
+              },
+            )
+          ],
         ),
         body: BodyScaffold(),
         floatingActionButton: Row(

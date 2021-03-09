@@ -27,5 +27,19 @@ class UserCubit extends Cubit<UserState> {
       emit(ActiveUserState(newUser)); //cambiar el estado y notificar a los listeners
     }
   }
+
+  void addProfession(String profession){
+    final currentState = state;
+    if (currentState is ActiveUserState) {
+      List<String> newprofessions = new List.from(currentState.activeUser.professions);
+      newprofessions.add(profession);
+      User newUser = currentState.activeUser.copyWith(professions: newprofessions);
+      emit(ActiveUserState(newUser));
+    }
+  }
+
+  void deleteUser(){
+    emit(InitialUserState());
+  }
     
 }
