@@ -41,5 +41,6 @@ class UserCubit extends Cubit<UserState> {
   void deleteUser(){
     emit(InitialUserState());
   }
+  
     
 }
