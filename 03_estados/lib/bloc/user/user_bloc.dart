@@ -19,16 +19,16 @@ class UserBloc extends Bloc<UserEvent, UserState>{
     // el yield solo se puede usar dentro de una funcion generadora, x lo tanto se debe
     // usar async o async*, async es para futures, async* es para streams
     if (event is EstablishUser) {
-      yield UserState(user: event.user);
-    }else if (event is ChangeAge) {
-      yield UserState(user: state.user.copyWith(age: event.age));
-    }else if (event is AddProfession) {
+      yield state.copyWith(user: event.user);
+    }else if (event is ChangeAge && state.existUser) {
+      yield state.copyWith(user: state.user.copyWith(age: event.age));
+    }else if (event is AddProfession && state.existUser) {
       // List<String> newProfessions = List.from(state.user.professions)..add(event.profession);
       //otra manera:
       List<String> newProfessions = [...state.user.professions, event.profession];
-      yield UserState(user: state.user.copyWith(professions: newProfessions));
-    }else if (event is DeleteUser) {
-      yield UserState();
+      yield state.copyWith(user: state.user.copyWith(professions: newProfessions));
+    }else if (event is DeleteUser && state.existUser) {
+      yield state.initialState();
     }
   }
   
