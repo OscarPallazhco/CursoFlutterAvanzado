@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:estados/models/user.dart';
+
+import 'package:estados/bloc/user/user_bloc.dart';
 
 class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Page 2'),
@@ -13,7 +21,11 @@ class Page2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  User newUser = new User(name: 'Eduardo', age: 25, professions: []);
+                  // BlocProvider.of<UserBloc>(context).add(EstablishUser(newUser));
+                  userBloc.add(EstablishUser(newUser));
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,

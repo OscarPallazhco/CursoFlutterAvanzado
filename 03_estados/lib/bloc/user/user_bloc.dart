@@ -14,9 +14,13 @@ class UserBloc extends Bloc<UserEvent, UserState>{
   // de UserState
 
   @override
-  Stream<UserState> mapEventToState(UserEvent event) {
-    // TODO: implement mapEventToState
-    throw UnimplementedError();
+  Stream<UserState> mapEventToState(UserEvent event) async*{
+    // esta funcion siempre debe emitir algo del tipo UserState
+    // el yield solo se puede usar dentro de una funcion generadora, x lo tanto se debe
+    // usar async o async*, async es para futures, async* es para streams
+    if (event is EstablishUser) {
+      yield UserState(user: event.user);
+    }
   }
   
 }
