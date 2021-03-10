@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:estados/bloc/user/user_bloc.dart';
 
 class Page1 extends StatelessWidget {
   @override
@@ -8,7 +11,15 @@ class Page1 extends StatelessWidget {
           title: Text('Page 1'),
           centerTitle: true,
         ),
-        body: UserInformation(),
+        body: BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            if (state.existUser) {
+              return UserInformation();  
+            } else {
+              return Center(child: Text('No existe información del usuario'),);
+            }            
+          },
+        ),
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
