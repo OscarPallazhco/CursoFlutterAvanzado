@@ -9,6 +9,7 @@ class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    // ignore: close_sinks
     UserBloc userBloc = BlocProvider.of<UserBloc>(context);
 
     return Scaffold(
@@ -39,7 +40,9 @@ class Page2 extends StatelessWidget {
                 elevation: 2,
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  userBloc.add(ChangeAge(26));
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.35,
                   alignment: Alignment.center,

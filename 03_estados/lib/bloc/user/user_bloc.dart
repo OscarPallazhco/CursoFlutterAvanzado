@@ -20,6 +20,8 @@ class UserBloc extends Bloc<UserEvent, UserState>{
     // usar async o async*, async es para futures, async* es para streams
     if (event is EstablishUser) {
       yield UserState(user: event.user);
+    }else if (event is ChangeAge) {
+      yield UserState(user: state.user.copyWith(age: event.age));
     }
   }
   
