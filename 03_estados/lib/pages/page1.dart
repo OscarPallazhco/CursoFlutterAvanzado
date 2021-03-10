@@ -8,10 +8,24 @@ import 'package:estados/bloc/user/user_bloc.dart';
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // ignore: close_sinks
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text('Page 1'),
           centerTitle: true,
+          actions: [
+            BlocBuilder<UserBloc, UserState>(
+              builder: (BuildContext context, state) {
+                return IconButton(
+                  icon: Icon(Icons.exit_to_app),
+                  onPressed: state.existUser
+                    ? ()=> userBloc.add(DeleteUser())
+                    : null
+                );
+              },
+            )
+          ],
         ),
         body: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {

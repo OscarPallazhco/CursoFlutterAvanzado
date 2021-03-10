@@ -27,6 +27,8 @@ class UserBloc extends Bloc<UserEvent, UserState>{
       //otra manera:
       List<String> newProfessions = [...state.user.professions, event.profession];
       yield UserState(user: state.user.copyWith(professions: newProfessions));
+    }else if (event is DeleteUser) {
+      yield UserState();
     }
   }
   
