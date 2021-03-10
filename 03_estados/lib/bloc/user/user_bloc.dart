@@ -22,6 +22,11 @@ class UserBloc extends Bloc<UserEvent, UserState>{
       yield UserState(user: event.user);
     }else if (event is ChangeAge) {
       yield UserState(user: state.user.copyWith(age: event.age));
+    }else if (event is AddProfession) {
+      // List<String> newProfessions = List.from(state.user.professions)..add(event.profession);
+      //otra manera:
+      List<String> newProfessions = [...state.user.professions, event.profession];
+      yield UserState(user: state.user.copyWith(professions: newProfessions));
     }
   }
   
