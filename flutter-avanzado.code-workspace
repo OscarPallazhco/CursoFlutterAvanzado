@@ -12,6 +12,9 @@
 		},
 		{
 			"path": "03_estados"
+		},
+		{
+			"path": "04_map_app"
 		}
 	]
 }
