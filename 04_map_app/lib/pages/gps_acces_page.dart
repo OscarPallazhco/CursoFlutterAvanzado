@@ -6,7 +6,33 @@ class GpsAccesPage extends StatefulWidget {
   _GpsAccesPageState createState() => _GpsAccesPageState();
 }
 
-class _GpsAccesPageState extends State<GpsAccesPage> {
+class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver{
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);  //para que esté pendiente del estado de la pagina actual
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async{
+    // super.didChangeAppLifecycleState(state);
+
+    // caso de cuando regresa de las settings de la app, reenviarlo a la sgte pagina solo si concedió el
+    // permiso, caso contrario no realiza nada
+    if (state == AppLifecycleState.resumed) {
+      if (await Permission.location.isGranted) {
+        Navigator.pushReplacementNamed(context, 'mappage');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +73,8 @@ class _GpsAccesPageState extends State<GpsAccesPage> {
       case PermissionStatus.denied:
       case PermissionStatus.restricted:
       case PermissionStatus.permanentlyDenied:
+      case PermissionStatus.undetermined:        
+      case PermissionStatus.limited:        
         openAppSettings();
     }
   }
