@@ -5,7 +5,7 @@ class MyLocationState {
   final bool following, existLocation;
   final LatLng coord;
 
-  MyLocationState({this.following, this.existLocation, this.coord});
+  MyLocationState({this.following = true, this.existLocation = false, this.coord});
 
   MyLocationState copyWith({bool following, bool existLocation, LatLng coord})
     => new MyLocationState(
