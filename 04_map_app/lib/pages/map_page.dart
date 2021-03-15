@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_app/bloc/map/map_bloc.dart';
 import 'package:map_app/bloc/my_location/my_location_bloc.dart';
 
+import 'package:map_app/widgets/myWidgets.dart';
+
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -27,19 +29,18 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<MyLocationBloc, MyLocationState>(
+    return BlocBuilder<MyLocationBloc, MyLocationState>(
         builder: (BuildContext context, state) {
           // print(' build: ${state.coord.latitude},${state.coord.longitude}');
           return state.existLocation
-          ? _bodyWithMap(state)
-          : _bodyWithoutMap();
+          ? _scaffoldWithMap(state)
+          : _scaffoldWithoutMap();
         },
-      ),
     );
+    
   }
 
-  Widget _bodyWithMap(MyLocationState state){
+  Widget _scaffoldWithMap(MyLocationState state){
 
     // ignore: close_sinks
     final mapBloc = BlocProvider.of<MapBloc>(context);
@@ -47,21 +48,34 @@ class _MapPageState extends State<MapPage> {
 
     CameraPosition _kinitialPosition = CameraPosition(
       target: state.coord,
-      zoom: 15.0,
+      zoom: 15.0
     );
 
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _kinitialPosition,
-      onMapCreated: (GoogleMapController controller) {
-        mapBloc.initMap(controller);
-      },
+    return Scaffold(
+      body: GoogleMap(
+        mapType: MapType.normal,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        initialCameraPosition: _kinitialPosition,
+        zoomControlsEnabled: false,
+        onMapCreated: (GoogleMapController controller) {
+          mapBloc.initMap(controller);
+        },
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+           BtnMyLocation()
+        ],
+      ),
     );
   }
 
-  Widget _bodyWithoutMap(){
-    return Center(
-      child: Text('No existen coordenadas'),
+  Widget _scaffoldWithoutMap(){
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
