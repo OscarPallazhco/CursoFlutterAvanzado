@@ -16,7 +16,12 @@ class MyLocationBloc extends Bloc<MyLocationEvent, MyLocationState> {
 
   @override
   Stream<MyLocationState> mapEventToState(MyLocationEvent event) async* {
-    // TODO: implement mapEventToState
+    if (event is OnLocationChanged) {
+      yield state.copyWith(
+        existLocation: true,
+        coord: event.location
+      );
+    }
   }
 
   void startTracking(){
@@ -24,7 +29,9 @@ class MyLocationBloc extends Bloc<MyLocationEvent, MyLocationState> {
       desiredAccuracy: LocationAccuracy.high,
       distanceFilter: 10
     ).listen((Position position) { 
-      print(position);
+      // print(position);
+      final newLocation = new LatLng(position.latitude, position.longitude);
+      add(OnLocationChanged(newLocation));
     });
   }
 

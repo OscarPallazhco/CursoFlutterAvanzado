@@ -25,7 +25,13 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('MapPage'),
+        child: BlocBuilder<MyLocationBloc, MyLocationState>(
+          builder: (BuildContext context, state) {
+            return state.existLocation
+            ? Text('${state.coord.latitude}, ${state.coord.longitude}')
+            : Text('MapPage');
+          },
+        ),
       ),
     );
   }
