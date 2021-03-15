@@ -1,8 +1,9 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:map_app/bloc/map/map_bloc.dart';
 import 'package:map_app/bloc/my_location/my_location_bloc.dart';
 
 class MapPage extends StatefulWidget {
@@ -11,8 +12,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-
-  Completer<GoogleMapController> _controller = Completer();
 
   @override
   void initState() {
@@ -42,6 +41,8 @@ class _MapPageState extends State<MapPage> {
 
   Widget _bodyWithMap(MyLocationState state){
 
+    // ignore: close_sinks
+    final mapBloc = BlocProvider.of<MapBloc>(context);
     print(' _bodyWithMap: ${state.coord.latitude},${state.coord.longitude}');
 
     CameraPosition _kinitialPosition = CameraPosition(
@@ -53,7 +54,7 @@ class _MapPageState extends State<MapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _kinitialPosition,
       onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
+        mapBloc.initMap(controller);
       },
     );
   }
