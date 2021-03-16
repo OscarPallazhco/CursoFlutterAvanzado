@@ -10,7 +10,7 @@ class MapState {
 
   MapState({
     this.mapIsReady = false,
-    this.drawRoute = true,
+    this.drawRoute = false,
     this.moveCameraAutomatic = false,
     this.centralPosition, // comenzará con null
     Map<String, Polyline> polylines

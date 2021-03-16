@@ -17,7 +17,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   GoogleMapController _mapCtrller;
   Polyline _myRoutePolyline = new Polyline(
     polylineId: PolylineId('myRoute'),
-    color: Colors.black87
+    color: Colors.transparent
   );
 
   void initMap(GoogleMapController controller){
