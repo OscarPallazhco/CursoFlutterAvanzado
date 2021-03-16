@@ -10,4 +10,7 @@ class OnMapChangeLocation extends MapEvent{
 }
 class OnMapShowRoute extends MapEvent{}
 class OnMapMoveCameraAutomatic extends MapEvent{}
-
+class OnMapCameraMoved extends MapEvent{
+  final LatLng location;
+  OnMapCameraMoved(this.location);
+}

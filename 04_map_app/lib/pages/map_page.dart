@@ -44,7 +44,7 @@ class _MapPageState extends State<MapPage> {
 
     // ignore: close_sinks
     final mapBloc = BlocProvider.of<MapBloc>(context);
-    print(' _bodyWithMap: ${state.coord.latitude},${state.coord.longitude}');
+    // print(' _bodyWithMap: ${state.coord.latitude},${state.coord.longitude}');
 
     mapBloc.add(OnMapChangeLocation(state.coord));
 
@@ -63,6 +63,9 @@ class _MapPageState extends State<MapPage> {
         polylines: mapBloc.state.polylines.values.toSet(),
         onMapCreated: (GoogleMapController controller) {
           mapBloc.initMap(controller);
+        },
+        onCameraMove: (CameraPosition cameraPosition){
+          mapBloc.add(OnMapCameraMoved(cameraPosition.target));
         },
       ),
       floatingActionButton: Column(

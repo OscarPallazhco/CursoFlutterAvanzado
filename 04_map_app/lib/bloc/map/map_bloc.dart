@@ -45,6 +45,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }else if (event is OnMapMoveCameraAutomatic) {
       // ver en _onMapChangeLocation el uso de la funcion moveCamera()
       yield state.copyWith(moveCameraAutomatic: !state.moveCameraAutomatic);
+    }else if (event is OnMapCameraMoved) {
+      // print(event.location);
+      yield state.copyWith(centralPosition: event.location);
     }
   }
 
