@@ -8,6 +8,8 @@ class GpsAccesPage extends StatefulWidget {
 
 class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver{
 
+  bool popup = false;
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);  //para que esté pendiente del estado de la pagina actual
@@ -26,7 +28,7 @@ class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver
 
     // caso de cuando regresa de las settings de la app, reenviarlo a la sgte pagina solo si concedió el
     // permiso, caso contrario no realiza nada
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed && !popup) {
       if (await Permission.location.isGranted) {
         Navigator.pushReplacementNamed(context, 'loadingpage');
       }
@@ -53,8 +55,10 @@ class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver
                 child: Text('Solicitar acceso', style: TextStyle(color: Colors.white),),
                 elevation: 0,
                 onPressed: () async {
-                  var status = await Permission.location.request();
-                  accesGps(status);
+                  popup = true;
+                  final status = await Permission.location.request();
+                  await accesGps(status);
+                  popup = false;
                 },
               ),
             )
@@ -64,11 +68,11 @@ class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver
     );
   }
 
-  void accesGps(PermissionStatus status) {
+  Future accesGps(PermissionStatus status) async{
     switch (status) {
       case PermissionStatus.granted:
         print("otorgado");
-        Navigator.pushReplacementNamed(context, 'loadingpage');
+        await Navigator.pushReplacementNamed(context, 'loadingpage');
         break;
       case PermissionStatus.denied:
       case PermissionStatus.restricted:

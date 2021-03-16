@@ -57,16 +57,18 @@ class _LoadingPageState extends State<LoadingPage> with WidgetsBindingObserver{
 
   Future _checkGpsAndLocation(BuildContext context) async {
     final gpsPermit = await Permission.location.isGranted;
-    // final geoPermit = await Geolocator().isLocationServiceEnabled();  //versiones +6 cambia
-    final geoPermit = await Geolocator.isLocationServiceEnabled();
+    // final geoIsActivated = await Geolocator().isLocationServiceEnabled();  //versiones +6 cambia
+    final geoIsActivated = await Geolocator.isLocationServiceEnabled();
     // await Future.delayed(Duration(seconds: 3));
 
-    if (gpsPermit && geoPermit) {
+    if (gpsPermit && geoIsActivated) {
       Navigator.pushReplacement(context, navigateFadeInToPage(context, MapPage() ));
       return 'permisos concedidos';
-    }else {
-      Navigator.pushReplacement(context, navigateFadeInToPage(context, GpsAccesPage() ));
-      return 'permisos no concedidos';
+    } else if ( !gpsPermit ) {
+      Navigator.pushReplacement(context, navigateFadeInToPage(context, GpsAccesPage() ));  
+      return 'Es necesario el permiso de GPS';
+    } else {
+      return 'Active el GPS';
     }
   }
 }
