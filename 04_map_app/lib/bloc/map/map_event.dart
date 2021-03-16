@@ -8,3 +8,5 @@ class OnMapChangeLocation extends MapEvent{
   final LatLng location;
   OnMapChangeLocation(this.location);
 }
+class OnMapShowRoute extends MapEvent{}
+

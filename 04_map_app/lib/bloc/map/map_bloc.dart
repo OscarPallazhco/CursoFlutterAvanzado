@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:meta/meta.dart';
+import 'package:flutter/material.dart' show Colors;
 import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,6 +17,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   GoogleMapController _mapCtrller;
   Polyline _myRoutePolyline = new Polyline(
     polylineId: PolylineId('myRoute'),
+    color: Colors.black87
   );
 
   void initMap(GoogleMapController controller){
@@ -41,6 +43,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       Map<String, Polyline> currentPolylines = state.polylines; // obtener el mapa de polylines actual del state
       currentPolylines['myRoute'] = this._myRoutePolyline;  // actualizar en el mapa el polyline de myRoute
       yield state.copyWith(polylines: currentPolylines);  // crear un nuevo estado con el mapa de polylines actualizado
+    }else if (event is OnMapShowRoute) {
+      if (!state.drawRoute) {
+        this._myRoutePolyline = this._myRoutePolyline.copyWith(colorParam: Colors.black87);
+      }else{
+        this._myRoutePolyline = this._myRoutePolyline.copyWith(colorParam: Colors.transparent);
+      }
+      Map<String, Polyline> currentPolylines = state.polylines;
+      currentPolylines['myRoute'] = this._myRoutePolyline;
+      yield state.copyWith(
+        drawRoute: !state.drawRoute,
+        polylines: currentPolylines,
+      );
     }
   }
 }
