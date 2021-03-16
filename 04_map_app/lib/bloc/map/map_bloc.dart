@@ -42,10 +42,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       // yield* para regresar no el stream sino la emisión del stream
     }else if (event is OnMapShowRoute) {
       yield* _onMapShowRoute(event);
+    }else if (event is OnMapMoveCameraAutomatic) {
+      // ver en _onMapChangeLocation el uso de la funcion moveCamera()
+      yield state.copyWith(moveCameraAutomatic: !state.moveCameraAutomatic);
     }
   }
 
   Stream<MapState> _onMapChangeLocation(OnMapChangeLocation event) async*{
+    if(state.moveCameraAutomatic) moveCamera(event.location); // mover la camara automáticamente solo si el usuario tiene activado la función
     List<LatLng> points = [...this._myRoutePolyline.points, event.location];  // crear arreglo de ptos actuales más el nuevo pto
     this._myRoutePolyline = this._myRoutePolyline.copyWith(pointsParam: points);  // actualizar el polyline actual con el nuevo arreglo de ptos
     Map<String, Polyline> currentPolylines = state.polylines; // obtener el mapa de polylines actual del state

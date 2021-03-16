@@ -70,6 +70,7 @@ class _MapPageState extends State<MapPage> {
         children: [
            BtnMyLocation(),
            BtnDrawMyRoute(),
+           BtnMoveCameraAutomatic(),
         ],
       ),
     );
