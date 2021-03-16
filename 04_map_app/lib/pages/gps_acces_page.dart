@@ -28,7 +28,7 @@ class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver
     // permiso, caso contrario no realiza nada
     if (state == AppLifecycleState.resumed) {
       if (await Permission.location.isGranted) {
-        Navigator.pushReplacementNamed(context, 'mappage');
+        Navigator.pushReplacementNamed(context, 'loadingpage');
       }
     }
   }
@@ -68,7 +68,7 @@ class _GpsAccesPageState extends State<GpsAccesPage> with WidgetsBindingObserver
     switch (status) {
       case PermissionStatus.granted:
         print("otorgado");
-        Navigator.pushReplacementNamed(context, 'mappage');
+        Navigator.pushReplacementNamed(context, 'loadingpage');
         break;
       case PermissionStatus.denied:
       case PermissionStatus.restricted:

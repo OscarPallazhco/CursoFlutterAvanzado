@@ -64,10 +64,9 @@ class _LoadingPageState extends State<LoadingPage> with WidgetsBindingObserver{
     if (gpsPermit && geoPermit) {
       Navigator.pushReplacement(context, navigateFadeInToPage(context, MapPage() ));
       return 'permisos concedidos';
-    }else if (!gpsPermit) {
-      return 'permiso gps no concedido';
-    }else if (!geoPermit) {
-      return 'geolocator no activado';
+    }else {
+      Navigator.pushReplacement(context, navigateFadeInToPage(context, GpsAccesPage() ));
+      return 'permisos no concedidos';
     }
   }
 }
