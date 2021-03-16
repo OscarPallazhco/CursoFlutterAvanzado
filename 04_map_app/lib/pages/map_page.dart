@@ -15,6 +15,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
 
+  // CameraPosition _currentCameraPosition;
+
   @override
   void initState() {
     BlocProvider.of<MyLocationBloc>(context).startTracking();
@@ -66,7 +68,13 @@ class _MapPageState extends State<MapPage> {
         },
         onCameraMove: (CameraPosition cameraPosition){
           mapBloc.add(OnMapCameraMoved(cameraPosition.target));
+          // this._currentCameraPosition = cameraPosition;
         },
+        // onCameraIdle: (){
+        //   if (this._currentCameraPosition != null) {
+        //     mapBloc.add(OnMapCameraMoved(this._currentCameraPosition.target));
+        //   }
+        // },
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
