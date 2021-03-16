@@ -14,6 +14,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   // ignore: unused_field
   GoogleMapController _mapCtrller;
+  Polyline _myRoutePolyline = new Polyline(
+    polylineId: PolylineId('myRoute'),
+  );
 
   void initMap(GoogleMapController controller){
     if (!state.mapIsReady) {
@@ -32,6 +35,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Stream<MapState> mapEventToState(MapEvent event,) async* {
     if (event is OnMapIsReady) {
       yield state.copyWith(mapIsReady: true);
+    }else if (event is OnMapChangeLocation) {
+      List<LatLng> points = [...this._myRoutePolyline.points, event.location];  // crear arreglo de ptos actuales más el nuevo pto
+      this._myRoutePolyline = this._myRoutePolyline.copyWith(pointsParam: points);  // actualizar el polyline actual con el nuevo arreglo de ptos
+      Map<String, Polyline> currentPolylines = state.polylines; // obtener el mapa de polylines actual del state
+      currentPolylines['myRoute'] = this._myRoutePolyline;  // actualizar en el mapa el polyline de myRoute
+      yield state.copyWith(polylines: currentPolylines);  // crear un nuevo estado con el mapa de polylines actualizado
     }
   }
 }

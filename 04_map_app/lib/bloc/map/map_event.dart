@@ -4,3 +4,7 @@ part of 'map_bloc.dart';
 abstract class MapEvent {}
 
 class OnMapIsReady extends MapEvent{}
+class OnMapChangeLocation extends MapEvent{
+  final LatLng location;
+  OnMapChangeLocation(this.location);
+}

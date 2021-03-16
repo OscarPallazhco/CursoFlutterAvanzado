@@ -46,6 +46,8 @@ class _MapPageState extends State<MapPage> {
     final mapBloc = BlocProvider.of<MapBloc>(context);
     print(' _bodyWithMap: ${state.coord.latitude},${state.coord.longitude}');
 
+    mapBloc.add(OnMapChangeLocation(state.coord));
+
     CameraPosition _kinitialPosition = CameraPosition(
       target: state.coord,
       zoom: 15.0
@@ -58,6 +60,7 @@ class _MapPageState extends State<MapPage> {
         myLocationButtonEnabled: false,
         initialCameraPosition: _kinitialPosition,
         zoomControlsEnabled: false,
+        polylines: mapBloc.state.polylines.values.toSet(),
         onMapCreated: (GoogleMapController controller) {
           mapBloc.initMap(controller);
         },
