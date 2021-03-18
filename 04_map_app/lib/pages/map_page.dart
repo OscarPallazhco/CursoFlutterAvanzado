@@ -56,25 +56,16 @@ class _MapPageState extends State<MapPage> {
     );
 
     return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.normal,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: false,
-        initialCameraPosition: _kinitialPosition,
-        zoomControlsEnabled: false,
-        polylines: mapBloc.state.polylines.values.toSet(),
-        onMapCreated: (GoogleMapController controller) {
-          mapBloc.initMap(controller);
-        },
-        onCameraMove: (CameraPosition cameraPosition){
-          mapBloc.add(OnMapCameraMoved(cameraPosition.target));
-          // this._currentCameraPosition = cameraPosition;
-        },
-        // onCameraIdle: (){
-        //   if (this._currentCameraPosition != null) {
-        //     mapBloc.add(OnMapCameraMoved(this._currentCameraPosition.target));
-        //   }
-        // },
+      body: Stack(
+        children: [
+          _drawMap(_kinitialPosition, mapBloc),
+          Positioned(
+            child: SearchBar(),
+            top: 10,
+            left: 10,
+            right: 10,
+          )
+        ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -84,6 +75,29 @@ class _MapPageState extends State<MapPage> {
            BtnMoveCameraAutomatic(),
         ],
       ),
+    );
+  }
+
+  GoogleMap _drawMap(CameraPosition _kinitialPosition, MapBloc mapBloc) {
+    return GoogleMap(
+      mapType: MapType.normal,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: false,
+      initialCameraPosition: _kinitialPosition,
+      zoomControlsEnabled: false,
+      polylines: mapBloc.state.polylines.values.toSet(),
+      onMapCreated: (GoogleMapController controller) {
+        mapBloc.initMap(controller);
+      },
+      onCameraMove: (CameraPosition cameraPosition){
+        mapBloc.add(OnMapCameraMoved(cameraPosition.target));
+        // this._currentCameraPosition = cameraPosition;
+      },
+      // onCameraIdle: (){
+      //   if (this._currentCameraPosition != null) {
+      //     mapBloc.add(OnMapCameraMoved(this._currentCameraPosition.target));
+      //   }
+      // },
     );
   }
 
