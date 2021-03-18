@@ -6,8 +6,7 @@ class SearchBar extends StatelessWidget {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
     return SafeArea(
-      child: GestureDetector(
-        onTap: (){print('Search');},
+      child: GestureDetector(        
         child: Container(
           width: deviceWidth * 0.8,
           height: deviceHeight * 0.08,
@@ -21,6 +20,13 @@ class SearchBar extends StatelessWidget {
                   color: Colors.black12, blurRadius: 5, offset: Offset(0, 5))
             ]),
         ),
+        onTap: (){
+          print('Search');
+          showSearch(
+            context: context,
+            delegate: SearchDestination()
+          );
+        },
       ),
     );
   }
