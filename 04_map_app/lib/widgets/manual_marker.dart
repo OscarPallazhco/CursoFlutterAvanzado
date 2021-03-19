@@ -3,16 +3,25 @@ part of 'myWidgets.dart';
 class ManualMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _marker(),
-        _cancelButton(context),
-        _checkButton(context),
-      ],
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        if (state.manualSelection) {
+          return Stack(
+            children: [
+              _marker(),
+              _cancelButton(context),
+              _checkButton(context),
+            ],
+          ); 
+        } else {return Container();}
+         
+      },
     );
   }
 
   Positioned _cancelButton(BuildContext context) {
+    // ignore: close_sinks
+    final _searchBloc = BlocProvider.of<SearchBloc>(context);
     return Positioned(
         bottom: 20,
         left: MediaQuery.of(context).size.width*0.35,
@@ -23,7 +32,9 @@ class ManualMarker extends StatelessWidget {
             iconSize: 30,
             color: Colors.black,
             icon: Icon(Icons.cancel_rounded, color: Colors.black87 ,),
-            onPressed: (){}
+            onPressed: (){
+              _searchBloc.add(OnDesactivateManualMarker());
+            }
           ),          
         )
       );
