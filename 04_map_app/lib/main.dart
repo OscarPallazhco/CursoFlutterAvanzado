@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:map_app/bloc/map/map_bloc.dart';
 import 'package:map_app/bloc/my_location/my_location_bloc.dart';
+import 'package:map_app/bloc/search/search_bloc.dart';
 
 import 'package:map_app/routes/routes.dart';
  
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (BuildContext context) => MyLocationBloc(),),
-        BlocProvider(create: (BuildContext context) => MapBloc(),)
+        BlocProvider(create: (BuildContext context) => MapBloc(),),
+        BlocProvider(create: (BuildContext context) => SearchBloc(),),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
