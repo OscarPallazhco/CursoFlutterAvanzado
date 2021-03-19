@@ -59,12 +59,8 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         children: [
           _drawMap(_kinitialPosition, mapBloc),
-          Positioned(
-            child: SearchBar(),
-            top: 10,
-            left: 10,
-            right: 10,
-          )
+          _drawSearchBar(),
+          ManualMarker()
         ],
       ),
       floatingActionButton: Column(
@@ -75,6 +71,15 @@ class _MapPageState extends State<MapPage> {
            BtnMoveCameraAutomatic(),
         ],
       ),
+    );
+  }
+
+  Positioned _drawSearchBar() {
+    return Positioned(
+      child: SearchBar(),
+      top: 10,
+      left: 10,
+      right: 10,
     );
   }
 

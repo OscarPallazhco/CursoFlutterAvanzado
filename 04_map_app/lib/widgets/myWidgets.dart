@@ -10,3 +10,4 @@ part 'btn_my_location_widget.dart';
 part 'btn_draw_my_route_widget .dart';
 part 'btn_move_camera_automatic_widget.dart';
 part 'searchbar_widget.dart';
+part 'manual_marker.dart';
