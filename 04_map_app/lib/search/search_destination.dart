@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:map_app/models/search_result.dart';
 
-class SearchDestination extends SearchDelegate{
+class SearchDestination extends SearchDelegate<SearchResult>{
 
   @override
   final String searchFieldLabel;
@@ -22,9 +23,10 @@ class SearchDestination extends SearchDelegate{
   
   @override
   Widget buildLeading(BuildContext context) {
+    final SearchResult result = new SearchResult(cancel: true);
     return IconButton(
       icon: Icon(Icons.arrow_back_rounded),
-      onPressed: ()=>this.close(context, null)
+      onPressed: ()=>this.close(context, result)
     );
   }
   
@@ -35,13 +37,14 @@ class SearchDestination extends SearchDelegate{
   
   @override
   Widget buildSuggestions(BuildContext context) {
+    SearchResult result = new SearchResult(cancel: false, manual: true);
     return ListView(
       children: [        
         ListTile(
           leading: Icon(Icons.location_on),
           title: Text('Colocar ubicación manualmente'),
           onTap: (){
-            this.close(context, null);
+            this.close(context, result);
           },
         )
       ],
