@@ -83,26 +83,30 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  GoogleMap _drawMap(CameraPosition _kinitialPosition, MapBloc mapBloc) {
-    return GoogleMap(
-      mapType: MapType.normal,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-      initialCameraPosition: _kinitialPosition,
-      zoomControlsEnabled: false,
-      polylines: mapBloc.state.polylines.values.toSet(),
-      onMapCreated: (GoogleMapController controller) {
-        mapBloc.initMap(controller);
+  Widget _drawMap(CameraPosition _kinitialPosition, MapBloc mapBloc) {
+    return BlocBuilder<MapBloc, MapState>(
+      builder: (context, state) {
+        return GoogleMap(
+          mapType: MapType.normal,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          initialCameraPosition: _kinitialPosition,
+          zoomControlsEnabled: false,
+          polylines: state.polylines.values.toSet(),
+          onMapCreated: (GoogleMapController controller) {
+            mapBloc.initMap(controller);
+          },
+          onCameraMove: (CameraPosition cameraPosition){
+            mapBloc.add(OnMapCameraMoved(cameraPosition.target));
+            // this._currentCameraPosition = cameraPosition;
+          },
+          // onCameraIdle: (){
+          //   if (this._currentCameraPosition != null) {
+          //     mapBloc.add(OnMapCameraMoved(this._currentCameraPosition.target));
+          //   }
+          // },
+        );    
       },
-      onCameraMove: (CameraPosition cameraPosition){
-        mapBloc.add(OnMapCameraMoved(cameraPosition.target));
-        // this._currentCameraPosition = cameraPosition;
-      },
-      // onCameraIdle: (){
-      //   if (this._currentCameraPosition != null) {
-      //     mapBloc.add(OnMapCameraMoved(this._currentCameraPosition.target));
-      //   }
-      // },
     );
   }
 

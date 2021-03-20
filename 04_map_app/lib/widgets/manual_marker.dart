@@ -29,15 +29,15 @@ class ManualMarker extends StatelessWidget {
           duration: Duration(milliseconds: 300),
           child: CircleAvatar(
             maxRadius: 25,
-            backgroundColor: Colors.white,            
-            child: IconButton(              
+            backgroundColor: Colors.white,
+            child: IconButton(
               iconSize: 30,
               color: Colors.black,
               icon: Icon(Icons.cancel_rounded, color: Colors.black87 ,),
               onPressed: (){
                 _searchBloc.add(OnDesactivateManualMarker());
               }
-            ),          
+            ),
           ),
         )
       );
@@ -51,13 +51,15 @@ class ManualMarker extends StatelessWidget {
           duration: Duration(milliseconds: 300),
           child: CircleAvatar(
             maxRadius: 25,
-            backgroundColor: Colors.white,            
-            child: IconButton(              
+            backgroundColor: Colors.white,
+            child: IconButton(
               iconSize: 30,
               color: Colors.black,
               icon: Icon(Icons.check_circle, color: Colors.black87),
-              onPressed: (){}
-            ),          
+              onPressed: (){
+                _calculateDestination(context);
+              }
+            ),
           ),
         )
       );
@@ -70,5 +72,27 @@ class ManualMarker extends StatelessWidget {
         child: BounceInDown(child: Icon(Icons.location_on, size: 50,)),      
       ),
     );
+  }
+
+  void _calculateDestination(BuildContext context) async{
+    final _trafficService = new TrafficService();
+    // ignore: close_sinks
+    final _myLocationBloc = BlocProvider.of<MyLocationBloc>(context);
+    // ignore: close_sinks
+    final _mapBloc = BlocProvider.of<MapBloc>(context);
+    final start = _myLocationBloc.state.coord;
+    final end = _mapBloc.state.centralPosition;
+
+    // obtener de la respuesta las coordenadas, pasarlas a una lista de LatLngs necesario para crear un
+    // PolyLine
+    final trafficResponse = await _trafficService.getStartAndEndCoords(start, end);
+    final geometry = trafficResponse.routes[0].geometry;
+    final duration = trafficResponse.routes[0].duration;
+    final distance = trafficResponse.routes[0].distance;
+    final pointsDoubles = Poly.Polyline.Decode(encodedString: geometry, precision: 6).decodedCoords;
+    List<LatLng> pointsLatLngs = pointsDoubles.map((par){
+      return new LatLng(par[0], par[1]);
+    }).toList();
+    _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration));
   }
 }

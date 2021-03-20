@@ -15,9 +15,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   // ignore: unused_field
   GoogleMapController _mapCtrller;
+
   Polyline _myRoutePolyline = new Polyline(
     polylineId: PolylineId('myRoute'),
-    color: Colors.transparent
+    color: Colors.transparent,
+    width: 5
+  );
+  
+  Polyline _myDestinationRoutePolyline = new Polyline(
+    polylineId: PolylineId('myDestinationRoute'),
+    color: Colors.black87,
+    width: 5
   );
 
   void initMap(GoogleMapController controller){
@@ -46,8 +54,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       // ver en _onMapChangeLocation el uso de la funcion moveCamera()
       yield state.copyWith(moveCameraAutomatic: !state.moveCameraAutomatic);
     }else if (event is OnMapCameraMoved) {
-      // print(event.location);
       yield state.copyWith(centralPosition: event.location);
+    }else if (event is OnCreateRoute) {
+      yield* _onCreateRoute(event);
     }
   }
 
@@ -72,6 +81,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       drawRoute: !state.drawRoute,
       polylines: currentPolylines,
     );
+  }
+
+  Stream<MapState> _onCreateRoute(OnCreateRoute event) async*{
+    this._myDestinationRoutePolyline = this._myDestinationRoutePolyline.copyWith(pointsParam: event.routePoints);
+    Map<String, Polyline> currentPolylines = state.polylines;
+    currentPolylines['myDestinationRoute'] = this._myDestinationRoutePolyline;
+    yield state.copyWith(polylines: currentPolylines);
   }
 
 }
