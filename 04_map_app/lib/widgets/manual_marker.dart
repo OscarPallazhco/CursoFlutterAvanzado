@@ -75,9 +75,12 @@ class ManualMarker extends StatelessWidget {
   }
 
   void _calculateDestination(BuildContext context) async{
+    calculatingAlert(context);
     final _trafficService = new TrafficService();
     // ignore: close_sinks
     final _myLocationBloc = BlocProvider.of<MyLocationBloc>(context);
+        // ignore: close_sinks
+    final _searchBloc = BlocProvider.of<SearchBloc>(context);
     // ignore: close_sinks
     final _mapBloc = BlocProvider.of<MapBloc>(context);
     final start = _myLocationBloc.state.coord;
@@ -94,5 +97,7 @@ class ManualMarker extends StatelessWidget {
       return new LatLng(par[0], par[1]);
     }).toList();
     _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration));
+    Navigator.of(context).pop();  // quita la alert de 'calculando'
+    _searchBloc.add(OnDesactivateManualMarker());
   }
 }

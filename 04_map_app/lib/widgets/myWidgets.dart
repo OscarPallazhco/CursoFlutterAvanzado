@@ -5,6 +5,9 @@ import 'package:animate_do/animate_do.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:polyline/polyline.dart' as Poly;
 
+/* Helpers */
+import 'package:map_app/helpers/helpers.dart';
+
 /* Blocs */
 import 'package:map_app/bloc/map/map_bloc.dart';
 import 'package:map_app/bloc/my_location/my_location_bloc.dart';
@@ -13,6 +16,7 @@ import 'package:map_app/bloc/search/search_bloc.dart';
 /* Models */
 import 'package:map_app/models/search_result.dart';
 
+/* Search */
 import 'package:map_app/search/search_destination.dart';
 
 /* Services */
