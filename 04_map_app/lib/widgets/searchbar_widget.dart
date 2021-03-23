@@ -49,7 +49,7 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  void _handleSearch(BuildContext context, SearchResult result) {
+  void _handleSearch(BuildContext context, SearchResult result) async{
     // ignore: close_sinks
     final _searchBloc = BlocProvider.of<SearchBloc>(context);
     if (result.cancel) {
@@ -57,6 +57,30 @@ class SearchBar extends StatelessWidget {
     }else if (result.manual) {
       _searchBloc.add(OnActivateManualMarker());
       return;
-    }
+    }else{
+      // seleccionó un lugar, con lo cual en el SearchResult viene las coordenadas del lugar destino
+      
+      calculatingAlert(context);    
+      final _trafficService = new TrafficService();
+      // ignore: close_sinks
+      final _myLocationBloc = BlocProvider.of<MyLocationBloc>(context);
+      // ignore: close_sinks
+      final _mapBloc = BlocProvider.of<MapBloc>(context);
+      final start = _myLocationBloc.state.coord;
+      final end = result.destinationPosition;
+
+      // obtener de la respuesta las coordenadas, pasarlas a una lista de LatLngs necesario para crear un
+      // PolyLine
+      final trafficResponse = await _trafficService.getStartAndEndCoords(start, end);
+      final geometry = trafficResponse.routes[0].geometry;
+      final duration = trafficResponse.routes[0].duration;
+      final distance = trafficResponse.routes[0].distance;
+      final pointsDoubles = Poly.Polyline.Decode(encodedString: geometry, precision: 6).decodedCoords;
+      List<LatLng> pointsLatLngs = pointsDoubles.map((par){
+        return new LatLng(par[0], par[1]);
+      }).toList();
+      _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration));
+      }
+      Navigator.of(context).pop();  // quita la alert de 'calculando'
   }
 }

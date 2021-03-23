@@ -87,6 +87,16 @@ class SearchDestination extends SearchDelegate<SearchResult>{
               leading: Icon(Icons.place_rounded),
               title: Text(place.text),
               subtitle: Text(place.placeName),
+              onTap: (){
+                SearchResult result = new SearchResult(
+                  cancel: false,
+                  manual: false,
+                  destinationName: place.text,
+                  destinationDescription: place.placeName,
+                  destinationPosition: LatLng(place.center[1], place.center[0]),  // en mapbox: [long, lat]
+                );
+                this.close(context, result);
+              },
             );
           },
         );
