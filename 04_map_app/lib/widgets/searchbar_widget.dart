@@ -39,9 +39,11 @@ class SearchBar extends StatelessWidget {
         onTap: () async{
           // ignore: close_sinks
           final myLocationBloc = BlocProvider.of<MyLocationBloc>(context);
+          // ignore: close_sinks
+          final _searchBloc = BlocProvider.of<SearchBloc>(context);
           final SearchResult result = await showSearch(
             context: context,
-            delegate: SearchDestination(myLocationBloc.state.coord)
+            delegate: SearchDestination(myLocationBloc.state.coord, _searchBloc.state.history)
           );
           _handleSearch(context, result);
         },
@@ -82,5 +84,7 @@ class SearchBar extends StatelessWidget {
       _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration));
       }
       Navigator.of(context).pop();  // quita la alert de 'calculando'
+      _searchBloc.add(OnSaveToHistory(result));
+
   }
 }
