@@ -93,6 +93,7 @@ class _MapPageState extends State<MapPage> {
           initialCameraPosition: _kinitialPosition,
           zoomControlsEnabled: false,
           polylines: state.polylines.values.toSet(),
+          markers: state.markers.values.toSet(),
           onMapCreated: (GoogleMapController controller) {
             mapBloc.initMap(controller);
           },
