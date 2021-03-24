@@ -99,6 +99,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     Marker endMarker = new Marker(
       markerId: MarkerId('endMarker'),
       position: event.routePoints[event.routePoints.length - 1],
+      infoWindow: InfoWindow(
+        title: 'Destino final',
+        snippet: 'Distance: ${event.distance} \n Duration: ${event.duration}'
+      ),
     );
 
     Map<String, Marker> currentMarkers = {...state.markers};
