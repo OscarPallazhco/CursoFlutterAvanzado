@@ -84,10 +84,31 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Stream<MapState> _onCreateRoute(OnCreateRoute event) async*{
+    // polyline
     this._myDestinationRoutePolyline = this._myDestinationRoutePolyline.copyWith(pointsParam: event.routePoints);
     Map<String, Polyline> currentPolylines = state.polylines;
     currentPolylines['myDestinationRoute'] = this._myDestinationRoutePolyline;
-    yield state.copyWith(polylines: currentPolylines);
+
+    // start marker
+    Marker initialMarker = new Marker(
+      markerId: MarkerId('initialMarker'),
+      position: event.routePoints[0],
+    );
+  
+    // end marker
+    Marker endMarker = new Marker(
+      markerId: MarkerId('endMarker'),
+      position: event.routePoints[event.routePoints.length - 1],
+    );
+
+    Map<String, Marker> currentMarkers = {...state.markers};
+    currentMarkers['initialMarker'] = initialMarker;
+    currentMarkers['endMarker'] = endMarker;
+    
+    yield state.copyWith(
+      polylines: currentPolylines,
+      markers: currentMarkers
+    );
   }
 
 }
