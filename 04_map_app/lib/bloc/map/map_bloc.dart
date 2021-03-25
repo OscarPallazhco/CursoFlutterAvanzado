@@ -91,24 +91,28 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     Map<String, Polyline> currentPolylines = state.polylines;
     currentPolylines['myDestinationRoute'] = this._myDestinationRoutePolyline;
 
+    // custon marker from a image asset
+    final startIcon = await helpers.customAssetImageMarker();
+
+    // custon marker from a image network
+    final endIcon = await helpers.customNetworkImageMarker();
+
     // start marker
     Marker initialMarker = new Marker(
       markerId: MarkerId('initialMarker'),
       position: event.routePoints[0],
+      icon: endIcon,
       infoWindow: InfoWindow(
         title: 'Mi ubicación',
         snippet: 'Duración recorrido: ${(event.duration / 60).floor()} minutos.'
       ),
     );
-  
-    // custon marker from a image asset
-    final customAssetImageMarker = await helpers.customAssetImageMarker();
 
     // end marker
     Marker endMarker = new Marker(
       markerId: MarkerId('endMarker'),
       position: event.routePoints[event.routePoints.length - 1],
-      icon: customAssetImageMarker,
+      icon: startIcon,
       infoWindow: InfoWindow(
         title: event.destinationName,
         snippet: 'Distancia: ${ (event.distance / 1000).floor() } Km.'
