@@ -9,6 +9,7 @@ import 'package:map_app/helpers/debouncer.dart';
 
 import 'package:map_app/models/places_response.dart';
 import 'package:map_app/models/traffic_response.dart';
+import 'package:map_app/models/infoCoords_response.dart';
 
 class TrafficService{
 
@@ -90,6 +91,30 @@ class TrafficService{
 
     Future.delayed(Duration(milliseconds: 401)).then((_) => timer.cancel()); 
 
+  }
+
+  Future<InfoCoordsResponse> getInfoOfCoords(LatLng location) async{
+    try {
+      final url = '${this._baseGeoUrl}/mapbox.places/${location.longitude},${location.latitude}.json';
+      final queryParameters = {
+        'access_token' : _apiKey,
+        'language' : 'es',
+      };
+
+      final resp = await _dio.get(url, queryParameters: queryParameters);
+
+      if (resp.statusCode == 200) {
+        final data = infoCoordsResponseFromJson(resp.data);
+        return data;
+      } else {
+        print('respuesta fallida del servidor: ${resp.statusCode}');
+        return InfoCoordsResponse();
+      }
+
+   } catch (e) {
+      print(e);
+      return InfoCoordsResponse();
+    }
   }
 
 }

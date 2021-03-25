@@ -81,7 +81,8 @@ class SearchBar extends StatelessWidget {
       List<LatLng> pointsLatLngs = pointsDoubles.map((par){
         return new LatLng(par[0], par[1]);
       }).toList();
-      _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration));
+      final destinationName = result.destinationName;
+      _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration, destinationName));
       }
       Navigator.of(context).pop();  // quita la alert de 'calculando'
       _searchBloc.add(OnSaveToHistory(result));

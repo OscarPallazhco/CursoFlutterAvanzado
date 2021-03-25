@@ -86,6 +86,10 @@ class ManualMarker extends StatelessWidget {
     final start = _myLocationBloc.state.coord;
     final end = _mapBloc.state.centralPosition;
 
+    // info del destino
+    final infoEnd = await _trafficService.getInfoOfCoords(end);
+    final destinationName = infoEnd.features[0].text;
+
     // obtener de la respuesta las coordenadas, pasarlas a una lista de LatLngs necesario para crear un
     // PolyLine
     final trafficResponse = await _trafficService.getStartAndEndCoords(start, end);
@@ -96,7 +100,7 @@ class ManualMarker extends StatelessWidget {
     List<LatLng> pointsLatLngs = pointsDoubles.map((par){
       return new LatLng(par[0], par[1]);
     }).toList();
-    _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration));
+    _mapBloc.add(OnCreateRoute(pointsLatLngs, distance, duration, destinationName));
     Navigator.of(context).pop();  // quita la alert de 'calculando'
     _searchBloc.add(OnDesactivateManualMarker());
   }

@@ -93,6 +93,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     Marker initialMarker = new Marker(
       markerId: MarkerId('initialMarker'),
       position: event.routePoints[0],
+      infoWindow: InfoWindow(
+        title: 'Mi ubicación',
+        snippet: 'Duración recorrido: ${(event.duration / 60).floor()} minutos.'
+      ),
     );
   
     // end marker
@@ -100,14 +104,26 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       markerId: MarkerId('endMarker'),
       position: event.routePoints[event.routePoints.length - 1],
       infoWindow: InfoWindow(
-        title: 'Destino final',
-        snippet: 'Distance: ${event.distance} \n Duration: ${event.duration}'
+        title: event.destinationName,
+        snippet: 'Distancia: ${ (event.distance / 1000).floor() } Km.'
       ),
     );
 
     Map<String, Marker> currentMarkers = {...state.markers};
     currentMarkers['initialMarker'] = initialMarker;
     currentMarkers['endMarker'] = endMarker;
+
+    Future.delayed(Duration(milliseconds: 300)).then(
+      (value){
+        // hacer que el infowindow del marker aparezca de entrada y no solo al tocarlo
+        try {
+          _mapCtrller.showMarkerInfoWindow(MarkerId('endMarker'));          
+        } catch (e) {
+          print('Error al mostrar el infoWindow');
+          print(e);
+        }
+      }
+    );
     
     yield state.copyWith(
       polylines: currentPolylines,

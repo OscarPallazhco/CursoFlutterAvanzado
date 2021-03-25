@@ -18,5 +18,6 @@ class OnCreateRoute extends MapEvent{
   final List<LatLng> routePoints;
   final double distance;
   final double duration;
-  OnCreateRoute(this.routePoints, this.distance, this.duration);
+  final String destinationName;
+  OnCreateRoute(this.routePoints, this.distance, this.duration, this.destinationName);
 }
