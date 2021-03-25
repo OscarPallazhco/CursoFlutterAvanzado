@@ -5,6 +5,8 @@ import 'package:flutter/material.dart' show Colors;
 import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:map_app/helpers/helpers.dart' as helpers;
+
 import 'package:map_app/themes/uber_map_2017_theme.dart';
 
 part 'map_event.dart';
@@ -99,10 +101,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       ),
     );
   
+    // custon marker from a image asset
+    final customAssetImageMarker = await helpers.customAssetImageMarker();
+
     // end marker
     Marker endMarker = new Marker(
       markerId: MarkerId('endMarker'),
       position: event.routePoints[event.routePoints.length - 1],
+      icon: customAssetImageMarker,
       infoWindow: InfoWindow(
         title: event.destinationName,
         snippet: 'Distancia: ${ (event.distance / 1000).floor() } Km.'
