@@ -15,6 +15,9 @@
 		},
 		{
 			"path": "04_map_app"
+		},
+		{
+			"path": "05_stripe_app"
 		}
 	]
 }
