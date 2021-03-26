@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:meta/meta.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'package:flutter/material.dart' show Colors, Offset;
 import 'package:bloc/bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -92,16 +92,27 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentPolylines['myDestinationRoute'] = this._myDestinationRoutePolyline;
 
     // custon marker from a image asset
-    final startIcon = await helpers.customAssetImageMarker();
+    // final startIcon = await helpers.customAssetImageMarker();
 
     // custon marker from a image network
-    final endIcon = await helpers.customNetworkImageMarker();
+    // final endIcon = await helpers.customNetworkImageMarker();
+
+    // custon start marker from a widget
+    final duratioInMinutes = (event.duration / 60).floor();
+    final startIcon = await helpers.getStartMarkerIcon(duratioInMinutes);
+    
+    // custon end marker from a widget
+    double distanceInKm = (event.distance / 1000);
+    distanceInKm = (distanceInKm * 100).floor().toDouble();
+    distanceInKm = distanceInKm / 100;
+    final endIcon = await helpers.getEndMarkerIcon(event.destinationName, distanceInKm, 'Km');
 
     // start marker
     Marker initialMarker = new Marker(
+      anchor: Offset(0.0, 1.0),
       markerId: MarkerId('initialMarker'),
       position: event.routePoints[0],
-      icon: endIcon,
+      icon: startIcon,
       infoWindow: InfoWindow(
         title: 'Mi ubicación',
         snippet: 'Duración recorrido: ${(event.duration / 60).floor()} minutos.'
@@ -110,9 +121,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     // end marker
     Marker endMarker = new Marker(
+      anchor: Offset(0.0, 1.0),
       markerId: MarkerId('endMarker'),
       position: event.routePoints[event.routePoints.length - 1],
-      icon: startIcon,
+      icon: endIcon,
       infoWindow: InfoWindow(
         title: event.destinationName,
         snippet: 'Distancia: ${ (event.distance / 1000).floor() } Km.'
@@ -123,17 +135,17 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     currentMarkers['initialMarker'] = initialMarker;
     currentMarkers['endMarker'] = endMarker;
 
-    Future.delayed(Duration(milliseconds: 300)).then(
-      (value){
-        // hacer que el infowindow del marker aparezca de entrada y no solo al tocarlo
-        try {
-          _mapCtrller.showMarkerInfoWindow(MarkerId('endMarker'));          
-        } catch (e) {
-          print('Error al mostrar el infoWindow');
-          print(e);
-        }
-      }
-    );
+    // Future.delayed(Duration(milliseconds: 300)).then(
+    //   (value){
+    //     // hacer que el infowindow del marker aparezca de entrada y no solo al tocarlo
+    //     try {
+    //       _mapCtrller.showMarkerInfoWindow(MarkerId('endMarker'));          
+    //     } catch (e) {
+    //       print('Error al mostrar el infoWindow');
+    //       print(e);
+    //     }
+    //   }
+    // );
     
     yield state.copyWith(
       polylines: currentPolylines,
