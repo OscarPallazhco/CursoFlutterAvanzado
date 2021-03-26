@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
 
 import 'package:stripe_app/data/credit_cards.dart';
+import 'package:stripe_app/helpers/helpers.dart';
+import 'package:stripe_app/pages/credit_card_page.dart';
 
 import 'package:stripe_app/widgets/total_pay_button.dart';
 
@@ -40,7 +42,7 @@ class HomePage extends StatelessWidget {
     return Positioned(
       width: width,
       height: height,
-      top: 100,
+      top: 150,
       child: PageView.builder(
         itemCount: creditCards.length,
         controller: PageController(
@@ -49,12 +51,22 @@ class HomePage extends StatelessWidget {
         physics: BouncingScrollPhysics(), // curvatura que se ve en ios
         itemBuilder: (BuildContext context, int index) {
           final card = creditCards[index];
-          return CreditCardWidget(
-            cardNumber: card.cardNumber,
-            expiryDate: card.expiracyDate,
-            cardHolderName: card.cardHolderName,
-            cvvCode: card.cvv,
-            showBackView: false,
+          return GestureDetector(
+            child: Hero(
+              tag: card.cardNumber,
+              child: CreditCardWidget(
+                cardNumber: card.cardNumber,
+                expiryDate: card.expiracyDate,
+                cardHolderName: card.cardHolderName,
+                cvvCode: card.cvv,
+                showBackView: false,
+              ),
+            ),
+            onTap: (){
+              Widget page = CreditCardPage(card: card,);
+              Route route = navigateFadeInToPage(context, page);
+              Navigator.push(context, route);
+            },
           );
         },            
       ),
