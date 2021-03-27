@@ -1,25 +1,43 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
-import 'package:stripe_app/models/custom_credit_card.dart';
 
+// blocs
+import 'package:stripe_app/bloc/pay/pay_bloc.dart';
+
+// widgets
 import 'package:stripe_app/widgets/total_pay_button.dart';
 
 class CreditCardPage extends StatelessWidget {
 
-  final CustomCreditCard card;
-
-  const CreditCardPage({Key key, @required this.card}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+
+    final card = BlocProvider.of<PayBloc>(context).state.creditCard;
+
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          color: Colors.white,
+          iconSize: 26,
+          icon: Icon(
+            Platform.isAndroid
+            ? Icons.arrow_back_rounded
+            : Icons.arrow_back_ios_rounded
+          ),
+          onPressed: (){
+            final payBloc = BlocProvider.of<PayBloc>(context);
+            payBloc.add(OnCreditCardIsDeselected());
+            Navigator.pop(context);
+          },
+        ),
         title: Text('Pagar'),
         centerTitle: true,
       ),
       body: Stack(
         children: [
-          Container(),
+          Container(),          
           Hero(
             tag: card.cardNumber,
             child: CreditCardWidget(
