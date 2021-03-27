@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// blocs
+import 'package:stripe_app/bloc/pay/pay_bloc.dart';
 
 class TotalPayButton extends StatelessWidget {
   @override
@@ -40,11 +44,13 @@ class _BtnPay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool condition = true;
-    return condition
-      ? buildCardButtonPay(context)
-      : buildAppleOrGoogleButtonPay(context)
-    ;
+    return BlocBuilder<PayBloc, PayState>(
+      builder: (context, state) {
+        return state.creditCardIsSelected
+          ? buildCardButtonPay(context)
+          : buildAppleOrGoogleButtonPay(context);
+      },
+    );
   }
 
   Widget buildCardButtonPay(BuildContext context) {

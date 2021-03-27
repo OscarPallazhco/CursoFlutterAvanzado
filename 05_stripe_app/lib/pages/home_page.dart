@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
 
+import 'package:stripe_app/bloc/pay/pay_bloc.dart';
+
 import 'package:stripe_app/data/credit_cards.dart';
+
 import 'package:stripe_app/helpers/helpers.dart';
+
+import 'package:stripe_app/models/custom_credit_card.dart';
+
 import 'package:stripe_app/pages/credit_card_page.dart';
 
 import 'package:stripe_app/widgets/total_pay_button.dart';
@@ -50,7 +57,7 @@ class HomePage extends StatelessWidget {
         ),
         physics: BouncingScrollPhysics(), // curvatura que se ve en ios
         itemBuilder: (BuildContext context, int index) {
-          final card = creditCards[index];
+          final CustomCreditCard card = creditCards[index];
           return GestureDetector(
             child: Hero(
               tag: card.cardNumber,
@@ -63,7 +70,9 @@ class HomePage extends StatelessWidget {
               ),
             ),
             onTap: (){
-              Widget page = CreditCardPage(card: card,);
+              final payBloc = BlocProvider.of<PayBloc>(context);
+              payBloc.add(OnCreditCardIsSelected(card));
+              Widget page = CreditCardPage();
               Route route = navigateFadeInToPage(context, page);
               Navigator.push(context, route);
             },
