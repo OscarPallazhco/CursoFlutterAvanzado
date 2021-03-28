@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
+import 'package:stripe_app/models/payment_intent_response.dart';
 import 'package:stripe_app/models/stripe_custom_response.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 
@@ -42,6 +44,8 @@ class StripeService {
         CardFormPaymentRequest()
       );
 
+      final resp = await this._createPaymentIntent(amount: amount, currency: currency);
+
       //ningún inconveniente
       return StripeCustomResponse(ok: true);
 
@@ -60,11 +64,40 @@ class StripeService {
 
   }
 
-  Future _createPaymentIntent({
+  Future<PaymentIntentResponse> _createPaymentIntent({
     @required String amount,
     @required String currency,
   }) async{
+    try {
+      final dio = new Dio();
 
+      final data = {
+        'amount' : amount,
+        'currency' : currency,
+      };
+
+      final headerOptions = new Options(
+        contentType: Headers.formUrlEncodedContentType,
+        headers: {
+          'Authorization': 'Bearer $_secretKey'
+        }
+      );
+
+      final resp = await dio.post(
+        _paymentApiUrl,
+        data: data,
+        options: headerOptions,
+      );
+
+      //status diferentes de 200 caen en el catch
+      return PaymentIntentResponse.fromJson(resp.data);
+
+    } catch (e) {
+      print('Error en intento: ${e.toString()}');
+      return PaymentIntentResponse(
+        status: '400',
+      );
+    }
   }
 
   Future _makeThePayment({

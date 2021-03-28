@@ -10,7 +10,7 @@ class PayState {
   String get stringOfAmount => '${(this.amount * 100).floor()}';
 
   PayState({    
-    this.amount = 0.0,
+    this.amount = 1.0,
     this.currency = 'USD',
     this.creditCardIsSelected = false,
     this.creditCard
