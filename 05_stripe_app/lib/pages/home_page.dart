@@ -12,13 +12,16 @@ import 'package:stripe_app/models/custom_credit_card.dart';
 
 import 'package:stripe_app/pages/credit_card_page.dart';
 
+import 'package:stripe_app/services/stripe_service.dart';
+
 import 'package:stripe_app/widgets/total_pay_button.dart';
 
 class HomePage extends StatelessWidget {
+
+  final _stripeService = new StripeService();
+
   @override
   Widget build(BuildContext context) {
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +30,18 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: (){}
+            onPressed: () async{
+              final payBloc = BlocProvider.of<PayBloc>(context);
+              final resp = await this._stripeService.payWithNewCard(
+                amount: payBloc.state.stringOfAmount,
+                currency: payBloc.state.currency,
+              );
+              if (resp.ok) {
+                showAlert(context, 'Tarjeta válida', 'Todo correcto');
+              } else {
+                showAlert(context, 'Error', resp.msg);
+              }
+            }
           ),
         ],
       ),

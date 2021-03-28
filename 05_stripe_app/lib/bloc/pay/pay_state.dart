@@ -7,6 +7,8 @@ class PayState {
   final bool creditCardIsSelected;
   final CustomCreditCard creditCard;
 
+  String get stringOfAmount => '${(this.amount * 100).floor()}';
+
   PayState({    
     this.amount = 0.0,
     this.currency = 'USD',
