@@ -44,12 +44,16 @@ class StripeService {
         CardFormPaymentRequest()
       );
 
-      final resp = await this._createPaymentIntent(amount: amount, currency: currency);
+      final stripeCustomResponse = await this._makeThePayment(
+        amount: amount,
+        currency: currency,
+        paymentMethod: paymentMethod
+      );
 
-      //ningún inconveniente
-      return StripeCustomResponse(ok: true);
+      return stripeCustomResponse;
 
     } catch (e) {
+      print('Error en pagar con tarjeta nueva: ${e.toString()}');
       return StripeCustomResponse(
         ok: false,
         msg: e.toString()
@@ -93,19 +97,47 @@ class StripeService {
       return PaymentIntentResponse.fromJson(resp.data);
 
     } catch (e) {
-      print('Error en intento: ${e.toString()}');
+      print('Error en crear el intento de pago: ${e.toString()}');
       return PaymentIntentResponse(
         status: '400',
       );
     }
   }
 
-  Future _makeThePayment({
+  Future<StripeCustomResponse> _makeThePayment({
     @required String amount,
     @required String currency,
     @required PaymentMethod paymentMethod,
   }) async{
+    try {
+      // intento
+      final paymentIntentResponse = await this._createPaymentIntent(amount: amount, currency: currency);
 
+      // confirmar el intento
+      final paymentIntentResult = await StripePayment.confirmPaymentIntent(
+        PaymentIntent(
+          clientSecret: paymentIntentResponse.clientSecret,
+          paymentMethodId: paymentMethod.id
+        )
+      );
+
+      if (paymentIntentResult.status == 'succeeded') {
+        return StripeCustomResponse(ok: true);
+      } else {
+        print('Error en confirmar el intento de pago: ${paymentIntentResult.status}');
+        return StripeCustomResponse(
+          ok: false,
+          msg: 'Error en confirmar el intento de pago: ${paymentIntentResult.status}'
+        );
+      }
+
+    } catch (e) {
+      print('Error en hacer el pago: ${e.toString()}');
+      return StripeCustomResponse(
+        ok: false,
+        msg: e.toString(),        
+      );
+    }
   }
 
 

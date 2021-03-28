@@ -31,13 +31,15 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () async{
+              showLoading(context);
               final payBloc = BlocProvider.of<PayBloc>(context);
               final resp = await this._stripeService.payWithNewCard(
                 amount: payBloc.state.stringOfAmount,
                 currency: payBloc.state.currency,
               );
+              Navigator.pop(context);
               if (resp.ok) {
-                showAlert(context, 'Tarjeta válida', 'Todo correcto');
+                showAlert(context, 'Tarjeta válida', 'Pago realizado con éxito');
               } else {
                 showAlert(context, 'Error', resp.msg);
               }
