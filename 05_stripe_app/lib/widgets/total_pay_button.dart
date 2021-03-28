@@ -1,15 +1,24 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-// blocs
 import 'package:stripe_app/bloc/pay/pay_bloc.dart';
+
+import 'package:stripe_app/helpers/helpers.dart';
+
+import 'package:stripe_app/models/custom_credit_card.dart';
+
+import 'package:stripe_app/services/stripe_service.dart';
 
 class TotalPayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     final width = MediaQuery.of(context).size.width;
+    final payBloc = BlocProvider.of<PayBloc>(context);
+
     return Container(
       width: width,
       height: 100,
@@ -29,7 +38,7 @@ class TotalPayButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Total a pagar: ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Text('2559.99 ', style: TextStyle(fontSize: 20,)),
+              Text('${payBloc.state.amount} ${payBloc.state.currency} ', style: TextStyle(fontSize: 20,)),
             ],
           ),
           _BtnPay(),
@@ -60,7 +69,28 @@ class _BtnPay extends StatelessWidget {
       shape: StadiumBorder(),
       color: Colors.black,
       elevation: 0,
-      onPressed: () {        
+      onPressed: () async {
+        showLoading(context);
+        final StripeService stripeService = new StripeService();
+        final PayBloc payBloc = BlocProvider.of<PayBloc>(context);
+        final CustomCreditCard tarjeta = payBloc.state.creditCard;
+        final mesAnio = tarjeta.expiracyDate.split('/');
+        final CreditCard creditCard = new CreditCard(
+          number: tarjeta.cardNumber,
+          expMonth: int.parse(mesAnio[0]),
+          expYear: int.parse(mesAnio[1]),
+        );
+        final resp = await stripeService.payWithExistentCard(
+          amount: payBloc.state.stringOfAmount, 
+          currency: payBloc.state.currency,
+          creditCard: creditCard,
+        );
+        Navigator.pop(context);
+        if (resp.ok) {
+          showAlert(context, 'Pago completado', 'Pago realizado con éxito');
+        } else {
+          showAlert(context, 'Error', resp.msg);
+        }
       },
       child: Row(
         children: [

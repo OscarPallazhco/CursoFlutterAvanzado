@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
+import 'package:stripe_payment/stripe_payment.dart';
+
+// models
 import 'package:stripe_app/models/payment_intent_response.dart';
 import 'package:stripe_app/models/stripe_custom_response.dart';
-import 'package:stripe_payment/stripe_payment.dart';
 
 import 'package:stripe_app/global/environments.dart';
 
@@ -26,12 +28,37 @@ class StripeService {
     StripePayment.setOptions(stripeOptions);
   }
 
-  Future payWithExistentCard({
+  Future<StripeCustomResponse> payWithExistentCard({
     @required String amount,
     @required String currency,
     @required CreditCard creditCard,
   }) async{
-  
+    try {
+      
+      // paymentMethod
+      final paymentMethod = await StripePayment.createPaymentMethod(
+        PaymentMethodRequest(
+          card: creditCard
+        )
+      );
+
+      // hacer el pago
+      final stripeCustomResponse = await this._makeThePayment(
+        amount: amount,
+        currency: currency,
+        paymentMethod: paymentMethod
+      );
+
+      // respuesta de si el pago fue exitoso o no
+      return stripeCustomResponse;
+
+    } catch (e) {
+      print('Error en pagar con tarjeta existente: ${e.toString()}');
+      return StripeCustomResponse(
+        ok: false,
+        msg: e.toString()
+      );
+    }
   }
   
   Future<StripeCustomResponse> payWithNewCard({
@@ -39,17 +66,19 @@ class StripeService {
     @required String currency,
   }) async{
     try {
-
+      // paymentMethod
       final paymentMethod = await StripePayment.paymentRequestWithCardForm(
         CardFormPaymentRequest()
       );
-
+      
+      // hacer el pago
       final stripeCustomResponse = await this._makeThePayment(
         amount: amount,
         currency: currency,
-        paymentMethod: paymentMethod
+              paymentMethod: paymentMethod
       );
 
+      // respuesta de si el pago fue exitoso o no
       return stripeCustomResponse;
 
     } catch (e) {
