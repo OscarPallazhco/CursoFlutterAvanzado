@@ -124,7 +124,7 @@ class StripeService {
       );
       
       // paymentMethod
-      
+
       // final paymentMethod = await StripePayment.createPaymentMethod(
       //   PaymentMethodRequest(
       //     token: token
@@ -145,6 +145,9 @@ class StripeService {
         currency: currency,
         paymentMethod: paymentMethod
       );
+
+      // cerrar la ventana de pago con nativo
+      await StripePayment.completeNativePayRequest();
 
       // respuesta de si el pago fue exitoso o no
       return stripeCustomResponse;
