@@ -94,7 +94,68 @@ class StripeService {
     @required String amount,
     @required String currency,
   }) async{
+    try {
 
+      // androidPayOptions
+      final AndroidPayPaymentRequest androidPayOptions = AndroidPayPaymentRequest(
+        currencyCode: currency,
+        totalPrice: amount
+      );
+
+      // newAmount for apple
+      final newAmount = double.parse(amount) / 100;
+
+      // applePayOptions
+      final ApplePayPaymentOptions applePayOptions = ApplePayPaymentOptions(
+        currencyCode: currency,
+        countryCode: 'US',
+        items: [
+          ApplePayItem(
+            label: 'Mi producto',
+            amount: '$newAmount',            
+          )
+        ]
+      );
+
+      // token
+      final token = await StripePayment.paymentRequestWithNativePay(
+        androidPayOptions: androidPayOptions,
+        applePayOptions: applePayOptions
+      );
+      
+      // paymentMethod
+      
+      // final paymentMethod = await StripePayment.createPaymentMethod(
+      //   PaymentMethodRequest(
+      //     token: token
+      //   )
+      // );
+
+      final paymentMethod = await StripePayment.createPaymentMethod(
+        PaymentMethodRequest(
+          card: CreditCard(
+            token: token.tokenId,
+          )
+        )
+      );
+
+      // hacer el pago
+      final stripeCustomResponse = await this._makeThePayment(
+        amount: amount,
+        currency: currency,
+        paymentMethod: paymentMethod
+      );
+
+      // respuesta de si el pago fue exitoso o no
+      return stripeCustomResponse;
+
+    } catch (e) {
+      print('Error en pagar con tarjeta existente: ${e.toString()}');
+      return StripeCustomResponse(
+        ok: false,
+        msg: e.toString()
+      );
+    }
   }
 
   Future<PaymentIntentResponse> _createPaymentIntent({

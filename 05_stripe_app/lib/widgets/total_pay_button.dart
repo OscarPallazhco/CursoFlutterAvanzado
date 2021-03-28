@@ -112,7 +112,18 @@ class _BtnPay extends StatelessWidget {
       shape: StadiumBorder(),
       color: Colors.black,
       elevation: 0,
-      onPressed: () {        
+      onPressed: () async {
+        final StripeService stripeService = new StripeService();
+        final PayBloc payBloc = BlocProvider.of<PayBloc>(context);
+        final resp = await stripeService.payWithNativePay(
+          amount: payBloc.state.stringOfAmount, 
+          currency: payBloc.state.currency,
+        );
+        if (resp.ok) {
+          showAlert(context, 'Pago completado', 'Pago realizado con éxito');
+        } else {
+          showAlert(context, 'Error', resp.msg);
+        }
       },
       child: Row(
         children: [
