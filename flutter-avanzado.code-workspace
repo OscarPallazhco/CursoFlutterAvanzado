@@ -18,6 +18,9 @@
 		},
 		{
 			"path": "05_stripe_app"
+		},
+		{
+			"path": "06_auth_app"
 		}
 	]
 }
