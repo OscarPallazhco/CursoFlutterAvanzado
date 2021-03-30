@@ -113,12 +113,14 @@ class _BtnPay extends StatelessWidget {
       color: Colors.black,
       elevation: 0,
       onPressed: () async {
+        showLoading(context);
         final StripeService stripeService = new StripeService();
         final PayBloc payBloc = BlocProvider.of<PayBloc>(context);
         final resp = await stripeService.payWithNativePay(
           amount: payBloc.state.stringOfAmount, 
           currency: payBloc.state.currency,
         );
+        Navigator.pop(context);
         if (resp.ok) {
           showAlert(context, 'Pago completado', 'Pago realizado con éxito');
         } else {
