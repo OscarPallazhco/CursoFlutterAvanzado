@@ -13,6 +13,13 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Auth App'),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              color: Colors.white,
+              onPressed: (){},
+            )
+          ],
         ),
         body: Container(
           padding: EdgeInsets.all(20),
