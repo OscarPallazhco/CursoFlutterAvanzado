@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1082178956533",
+    "project_id": "flutter-signin-app-44bc7",
+    "storage_bucket": "flutter-signin-app-44bc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082178956533:android:c771a7511f92a5ee5aa9bc",
+        "android_client_info": {
+          "package_name": "com.oscarpallazhco.auth_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082178956533-b5m2pv058fuqvgk96g7ubk84jmi5emvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIvYUNLSNWnyctnKh8wqfYotk6K5R5OMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082178956533-b5m2pv058fuqvgk96g7ubk84jmi5emvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
