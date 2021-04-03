@@ -1,4 +1,7 @@
+import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:auth_app/models/server_response.dart';
 
 
 class GoogleSignInService {
@@ -11,23 +14,39 @@ class GoogleSignInService {
   );
 
 
-  static Future<GoogleSignInAccount> signInWithGoogle() async {
-
+  static Future<GoogleUser> signInWithGoogle() async {
+    
     try {
 
       final GoogleSignInAccount account = await _googleSignIn.signIn();
       final googleKey = await account.authentication;
 
-      print(account);
-      print('======  == ID TOKEN ========= ');
-      print( googleKey.idToken );
+      // print(account);
+      // print('======  == ID TOKEN ========= ');
+      // print( googleKey.idToken );
+      
+      final backEndUri = Uri(
+        scheme: 'https',
+        host: 'flutterauthappserver.herokuapp.com',
+        path: '/google',
+      );
 
+      final resp = await http.post(
+        backEndUri,
+        body: {
+          'token': googleKey.idToken
+        }
+      );
+      if (resp.statusCode!=200) {
+        return null;
+      }
 
-      // TODO: Llamar un servicio REST a nuestro backend
-      // con el ID Token
+      ServerResponse serverResponse = serverResponseFromJson(resp.body);
+      if (!serverResponse.ok) {
+        return null;
+      }
 
-
-       return account;
+      return serverResponse.googleUser;
 
       
     } catch (e) {

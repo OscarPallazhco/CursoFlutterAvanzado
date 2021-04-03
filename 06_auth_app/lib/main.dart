@@ -1,10 +1,19 @@
+import 'package:auth_app/models/server_response.dart';
 import 'package:auth_app/services/google_signin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
  
 void main() => runApp(MyApp());
  
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  GoogleUser googleUser;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,8 +25,10 @@ class MyApp extends StatelessWidget {
           actions: [
             IconButton(
               icon: Icon( FontAwesomeIcons.doorOpen ), 
-              onPressed: () {
-                GoogleSignInService.signOut();
+              onPressed: () async{
+                await GoogleSignInService.signOut();
+                this.googleUser = null;
+                setState(() {});
               }
             )
           ],
@@ -42,12 +53,16 @@ class MyApp extends StatelessWidget {
                       Text('  Sign in with Google', style: TextStyle( color: Colors.white, fontSize: 17 ),)
                     ],
                   ),
-                  onPressed: () {
-                    
-                    GoogleSignInService.signInWithGoogle();
-
+                  onPressed: () async{
+                    GoogleUser signInUser = await GoogleSignInService.signInWithGoogle();
+                    if (signInUser != null) {
+                      this.googleUser = signInUser;
+                      setState(() {});
+                    }                    
                   }
-                )
+                ),
+                SizedBox(height: 20,),
+                googleUserInfo()
 
 
               ],
@@ -56,5 +71,18 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
+  }
+
+  googleUserInfo() {
+    if (googleUser != null) {
+      return Column(
+        children: [
+          Text('Name: ${this.googleUser.name}',style: TextStyle(fontSize: 18),),
+          Text('Email: ${this.googleUser.email}',style: TextStyle(fontSize: 18),),
+        ],
+      );
+    }else{
+      return Text('No hay usuario loggeado ',style: TextStyle(fontSize: 18),);
+    }
   }
 }
